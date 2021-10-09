@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title> obs chat </title>
+
+	<style>
+    ::-webkit-scrollbar {
+      width: 0px;
+    }
+    body {
+      font-family: Roboto-Regular,Arial,Helvetica Neue,Helvetica,sans-serif;
+      font-weight: 400;
+      color: var(--wasd-color-text-prime);
+      background-color: var(--wasd-color-bg-prime);
+      -webkit-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased;
+      -webkit-overflow-scrolling: touch;
+    }
+  </style>
+
+	<link href="wasd_chat_style.css" rel="stylesheet">
+  <link href="https://static.wasd.tv/icons/css/wasd-font.css" rel="stylesheet">
+</head>
+<body style="display: contents;">
+
+	<wasd-chat-body _ngcontent-uer-c46="" _nghost-uer-c49="" style="height: 500px;">
+   <div _ngcontent-uer-c49="" class="body-container">
+      <wasd-chat-messages _ngcontent-uer-c49="" _nghost-uer-c53="">
+        <div _ngcontent-uer-c53="" class="block-wrapper">
+          <div _ngcontent-uer-c53="" class="block">
+            <div _ngcontent-uer-c53="" class="block__messages" id="messages_div">
+              <!---->
+              <!---->
+            </div>
+          </div>
+        </div>
+      </wasd-chat-messages>
+    </div>
+	</wasd-chat-body>
+
+  <script>
+    let settings = {}
+    settings.wasd = JSON.parse(decodeURI(new URL(document.URL).searchParams.get('settings')).replace(/HASH/ig, '#'))
+  </script>
+	<script src="index.js"></script>
+	<script src="helper/WASD.js"></script>
+  <script src="helper/BTTV.js"></script>
+  <script src="helper/FFZ.js"></script>
+  <script src="helper/TV7.js"></script>
+  <script src="helper/Twitch.js"></script>
+	<script src="lib/jquery.min.js"></script>
+  <script src="lib/moment.min.js"></script>
+  <script src="lib/strip-combining-marks.js"></script>
+
+
+	<script>
+		let channel_name = new URL(document.URL).searchParams.get('channel_name')
+
+    async function load() {
+      console.log(JSON.parse(decodeURI(new URL(document.URL).searchParams.get('settings')).replace(/HASH/ig, '#')))
+
+      await HelperBTTV.update();
+      let bttv = new URL(document.URL).searchParams.get('bttv')
+      if (bttv) await HelperBTTV.loadEmotesUsers(bttv)
+
+      await HelperFFZ.update();
+      let ffz = new URL(document.URL).searchParams.get('ffz')
+      if (ffz) await HelperFFZ.loadEmotesUsers(ffz)
+
+      await HelperTV7.update();
+      let tv7 = new URL(document.URL).searchParams.get('tv7')
+      if (tv7) await HelperTV7.loadEmotesUsers(tv7)
+
+      // settings.wasd = JSON.parse(decodeURI(new URL(document.URL).searchParams.get('settings')))
+
+  		if (channel_name) socket?.start(channel_name)
+    }
+
+    load()
+
+    document.querySelector('wasd-chat-body').style.height = ( window.innerHeight ) + 'px'
+    setInterval(() => {
+      document.querySelector('wasd-chat-body').style.height = ( window.innerHeight ) + 'px'
+    }, 100)
+    
+
+	</script>
+</body>
+</html>
