@@ -107,7 +107,7 @@ const HelperBTTV = {
           resolve(out)
         },
         error: function(out) {
-          reject(out?.message)
+          reject(out.message)
         }
       });
     });

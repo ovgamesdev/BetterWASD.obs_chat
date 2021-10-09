@@ -77,10 +77,10 @@ const socket = {
         fetch(`https://wasd.tv/api/profiles/current`)
         .then(res => res.json())
         .then((out) => {
-            if (out?.result?.user_profile?.channel_id) {
+            if (out.result.user_profile.channel_id) {
                 resolve(out.result)
             } else {
-                reject(out?.result?.user_role)
+                reject(out.result.user_role)
             }
         })
         .catch((err)=>{
@@ -97,7 +97,7 @@ const socket = {
         })
     },
     initBot() {
-        fetch(`https://wasd.tv/api/channels/${this.current?.user_profile?.channel_id}`)
+        fetch(`https://wasd.tv/api/channels/${this.current.user_profile.channel_id}`)
         .then(res => res.json())
         .then((out) => {
             if (!this.isBotInited && out.result.channel_is_live) {
@@ -469,8 +469,8 @@ const parser = {
     },
     isMod(JSData) {
         if (JSData) {
-            let role = JSData[1]?.user_channel_role == 'CHANNEL_MODERATOR'
-            if (!role) role = JSData[1]?.user_channel_role == 'CHANNEL_MODERATOR'
+            let role = JSData[1].user_channel_role == 'CHANNEL_MODERATOR'
+            if (!role) role = JSData[1].user_channel_role == 'CHANNEL_MODERATOR'
             return role
         } else {
             return false
@@ -479,8 +479,8 @@ const parser = {
     isSub(JSData) {
         if (JSData) {
             let role = false
-            for (let rol of JSData[1]?.other_roles) { if (rol == 'CHANNEL_SUBSCRIBER') role = true } //?
-            if (!role) role = JSData[1]?.user_channel_role == 'CHANNEL_SUBSCRIBER'
+            for (let rol of JSData[1].other_roles) { if (rol == 'CHANNEL_SUBSCRIBER') role = true } //?
+            if (!role) role = JSData[1].user_channel_role == 'CHANNEL_SUBSCRIBER'
             return role
         } else {
             return false
@@ -489,8 +489,8 @@ const parser = {
     isOwner(JSData) {
         if (JSData) {
             let role = false
-            for (let rol of JSData[1]?.other_roles) { if (rol == 'CHANNEL_OWNER') role = true } //?
-            if (!role) role = JSData[1]?.user_channel_role == 'CHANNEL_OWNER'
+            for (let rol of JSData[1].other_roles) { if (rol == 'CHANNEL_OWNER') role = true } //?
+            if (!role) role = JSData[1].user_channel_role == 'CHANNEL_OWNER'
             return role
         } else {
             return false
@@ -499,8 +499,8 @@ const parser = {
     isAdmin(JSData) {
         if (JSData) {
             let role = false
-            for (let rol of JSData[1]?.other_roles) { if (rol == 'WASD_ADMIN') role = true } //?
-            if (!role) role = JSData[1]?.user_channel_role == 'WASD_ADMIN'
+            for (let rol of JSData[1].other_roles) { if (rol == 'WASD_ADMIN') role = true } //?
+            if (!role) role = JSData[1].user_channel_role == 'WASD_ADMIN'
             return role
         } else {
             return false

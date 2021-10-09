@@ -107,7 +107,7 @@ const HelperTV7 = {
           resolve(out)
         },
         error: function(out) {
-          reject(out?.message)
+          reject(out.message)
         }
       });
     });

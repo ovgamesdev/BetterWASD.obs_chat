@@ -107,7 +107,7 @@ const HelperFFZ = {
           resolve(out)
         },
         error: function(out) {
-          reject(out?.message)
+          reject(out.message)
         }
       });
     });
