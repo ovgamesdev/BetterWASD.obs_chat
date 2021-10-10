@@ -11,7 +11,8 @@ var setting = {
     changeSettimgs(data) {
         settings.wasd = data
         setting.update()
-        console.log('update settings')
+        console.log('update settings', settings.wasd)
+        
     },
     update() {
         let cssCode = ''
@@ -28,18 +29,51 @@ var setting = {
           cssCode += `wasd-chat-follower-message { display: none!important; }`;
         }
 
+        if (!settings.wasd.simg) {
+          cssCode += `.message__img { display: none!important; }`;
+        }
+
+        if (!settings.wasd.catm) {
+          cssCode += `.chat-message-mention { color: rgba(var(--wasd-color-switch--rgb), .88)!important; }`;
+        }
+
+        if (!settings.wasd.fl) {
+          cssCode += `div.message-text > span > a { color: rgba(var(--wasd-color-switch--rgb), .88)!important; pointer-events: none; }`;
+        }
+
+        if (settings.wasd.fcbc) {
+          cssCode += `.zalgo { display: none; } .no-zalgo { display: inline; }`;
+        } else {
+          cssCode += `.no-zalgo { display: none; } .zalgo { display: inline; } `;
+        }
+
+        if (settings.wasd.ss.toString() === 'large') {
+          cssCode += `[alt="sticker_medium"] { display: none!important; } [alt="sticker_small"] { display: none!important; }`;
+        } else if (settings.wasd.ss.toString() === 'medium') {
+          cssCode += `[alt="sticker_large"] { display: none!important; }  [alt="sticker_small"] { display: none!important; }`;
+        } else if (settings.wasd.ss.toString() === 'small') {
+          cssCode += `[alt="sticker_large"] { display: none!important; }  [alt="sticker_medium"] { display: none!important; }`;
+        }
+
+        if (!settings.wasd.stime) {
+          cssCode += `.message__time { display: none!important; }`;
+          cssCode += `.is-time { padding: 2px 12px!important; }`;
+        } else {
+          cssCode += `.message__time.${settings.wasd.fmst.toString().replace(/:/ig, '-')} {display: flex!important;}`
+        }
+
         if (settings.wasd.ms) {
           cssCode += `wasd-chat-system-message { display: none!important; }`;
         }
 
         if (settings.wasd.st.toString() === '0') {
-          if (settings.wasd.forceResizeStickers.toString() === '1') {
+          if (settings.wasd.frs.toString() === '1') {
             cssCode += '.message__info img.sticker { display: block; height: 128px!important; width: 128px!important; margin-top: 8px; }'
-          } else if (settings.wasd.forceResizeStickers.toString() === '2') {
+          } else if (settings.wasd.frs.toString() === '2') {
             cssCode += '.message__info img.sticker { display: block; height: 56px!important; width: 56px!important; margin-top: 8px; }'
           }
         } else if (settings.wasd.st.toString() === '1') {
-          cssCode += 'img.sticker { width: 28px!important; height: 28px!important; margin-top: 0px!important; display: inline!important; vertical-align: middle!important; margin: -.5rem 0!important; }';
+          cssCode += 'img.sticker { width: 28px!important; height: 28px!important; margin-top: 0px!important; display: inline; vertical-align: middle!important; margin: -.5rem 0!important; }';
         } else if (settings.wasd.st.toString() === '2') {
           cssCode += '.block__messages__item[sticker] { display: none!important; }';
         } else if (settings.wasd.st.toString() === '3') {
