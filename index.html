@@ -56,10 +56,7 @@
 
 
 	<script>
-		let channel_name = new URL(document.URL).searchParams.get('channel_name')
-
     async function load() {
-      console.log(JSON.parse(decodeURI(new URL(document.URL).searchParams.get('settings')).replace(/HASH/ig, '#')))
 
       await HelperBTTV.update();
       let bttv = new URL(document.URL).searchParams.get('bttv')
@@ -75,7 +72,7 @@
 
       // settings.wasd = JSON.parse(decodeURI(new URL(document.URL).searchParams.get('settings')))
 
-  		if (channel_name) socket.start(channel_name)
+  		if (new URL(document.URL).searchParams.get('channel_name')) socket.start()
     }
 
     load()

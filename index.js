@@ -122,7 +122,8 @@ const socket = {
             }, 30000)
         })  
     },
-    start(channel_name) {
+    start() {
+        let channel_name = new URL(document.URL).searchParams.get('channel_name')
         this.socketd = new WebSocket("wss://chat.wasd.tv/socket.io/?EIO=3&transport=websocket");
 
         this.socketd.onopen = function(e) {
@@ -371,9 +372,9 @@ const socket = {
         div.classList.add('block__messages__item')
         div.innerHTML = `<wasd-chat-message _ngcontent-uer-c53="" _nghost-uer-c51="">
             <div _ngcontent-uer-c51="" class="message${settings.wasd.stime ? ` is-time` : ''}">
-                ${!settings.wasd.stime ? `<div _ngcontent-uer-c51="" class="message__time"> ${parser.time(JSData)} </div>` : ''}
+                ${settings.wasd.stime ? `<div _ngcontent-uer-c51="" class="message__time"> ${parser.time(JSData)} </div>` : ''}
                 <!---->
-                ${!settings.wasd.simg ? `<div _ngcontent-uer-c51="" class="message__img"><img _ngcontent-uer-c51="" wasdlazyvisibleclass="visible" alt="" src="${parser.avatar(JSData)}" class="visible"></div>` : '' }
+                ${settings.wasd.simg ? `<div _ngcontent-uer-c51="" class="message__img"><img _ngcontent-uer-c51="" wasdlazyvisibleclass="visible" alt="" src="${parser.avatar(JSData)}" class="visible"></div>` : '' }
                 <!---->
                 <!---->
                 <div _ngcontent-uer-c51="" class="message__info">
@@ -420,10 +421,10 @@ const socket = {
 
         div.classList.add('block__messages__item')
         div.innerHTML = `<wasd-chat-message _ngcontent-uer-c53="" _nghost-uer-c51="">
-            <div _ngcontent-uer-c51="" class="message is-time">
-                <div _ngcontent-uer-c51="" class="message__time"> ${parser.time(JSData)} </div>
+            <div _ngcontent-uer-c51="" class="message ${settings.wasd.stime ? ` is-time` : ''}">
+                ${settings.wasd.stime ? `<div _ngcontent-uer-c51="" class="message__time"> ${parser.time(JSData)} </div>` : ''}
                 <!---->
-                <div _ngcontent-uer-c51="" class="message__img"><img _ngcontent-uer-c51="" wasdlazyvisibleclass="visible" alt="" src="${parser.avatar(JSData)}" class="visible"></div>
+                ${settings.wasd.simg ? `<div _ngcontent-uer-c51="" class="message__img"><img _ngcontent-uer-c51="" wasdlazyvisibleclass="visible" alt="" src="${parser.avatar(JSData)}" class="visible"></div>` : '' }
                 <!---->
                 <!---->
                 <div _ngcontent-uer-c51="" class="message__info">
