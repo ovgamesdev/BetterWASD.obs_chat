@@ -43,6 +43,14 @@
     let settings = {}
     settings.wasd = JSON.parse(decodeURI(new URL(document.URL).searchParams.get('settings')).replace(/HASH/ig, '#'))
     console.log(settings.wasd)
+
+    window.addEventListener('message', event => {
+      if (event.origin.startsWith('https://wasd.tv/')) { 
+        setting.changeSettimgs(event.data)
+      } else {
+        return; 
+      } 
+    }); 
   </script>
 	<script src="index.js"></script>
 	<script src="helper/WASD.js"></script>

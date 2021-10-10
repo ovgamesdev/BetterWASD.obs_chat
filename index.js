@@ -1,10 +1,18 @@
 var setting = {
+    style: null,
+    init() {
+        if (this.style === null) {
+          this.style = document.createElement('style');
+          this.style.type = 'text/css';
+          document.body.append(this.style);
+          setting.update();
+        }
+    },
+    changeSettimgs(data) {
+        settings.wasd = data
+        setting.update()
+    }
     update() {
-
-        let style = document.createElement('style');
-        style.type = 'text/css';
-        document.body.append(style);
-
         let cssCode = ''
 
         cssCode += `.body-container { background: rgba(0,0,0,0)!important; }`
@@ -48,12 +56,12 @@ var setting = {
 
         cssCode += `div.message-text > span > a { color: ${settings.wasd.lc != '#000000' ? settings.wasd.lc : 'inherit'}; }`;
 
-        if (style) {
-          if (typeof style.styleSheet !== 'undefined') {
-            style.styleSheet.cssText = cssCode;
+        if (setting.style) {
+          if (typeof setting.style.styleSheet !== 'undefined') {
+            setting.style.styleSheet.cssText = cssCode;
           } else {
-            style.innerHTML = '';
-            style.appendChild(document.createTextNode(cssCode));
+            setting.style.innerHTML = '';
+            setting.style.appendChild(document.createTextNode(cssCode));
           }
 
           console.log('style inited')
@@ -153,7 +161,7 @@ const socket = {
                     socket.streamId = out.result.media_container.media_container_streams[0].stream_id
                     socket.channelId = out.result.channel.channel_id
 
-                    fetch(`https://wasd.tv/api/chat/streams/${socket.streamId}/messages?limit=500&offset=0`)
+                    fetch(`https://wasd.tv/api/chat/streams/${socket.streamId}/messages?limit=20&offset=0`)
                     .then(res => res.json())
                     .then((out) => {
 
@@ -169,7 +177,7 @@ const socket = {
                         var data = `42["join",{"streamId":${socket.streamId},"channelId":${socket.channelId},"jwt":"${socket.jwt}","excludeStickers":true}]`;
                         socket.socketd.send(data);
 
-                        setting.update()
+                        setting.init()
 
                         socket.intervalcheck = setInterval(() => {
                             if (socket.socketd) {
