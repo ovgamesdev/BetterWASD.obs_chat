@@ -47,6 +47,7 @@
     window.addEventListener('message', event => {
       if (event.origin.startsWith('https://wasd.tv/')) { 
         setting.changeSettimgs(event.data)
+        console.log('changeSettimgs', event.data)
       } else {
         return; 
       } 
