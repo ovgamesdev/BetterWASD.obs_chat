@@ -44,21 +44,6 @@
     settings.wasd = JSON.parse(decodeURI(new URL(document.URL).searchParams.get('settings')).replace(/HASH/ig, '#'))
     console.log(settings.wasd)
 
-    if (window.addEventListener) {
-      window.addEventListener("message", listener);
-    } else {
-      window.attachEvent("onmessage", listener);
-    }
-
-    function listener(event) {
-      console.log( "?" + event );
-      if (event.origin != 'https://wasd.tv') {
-        return;
-      }
-
-      console.log( "получено:" + event.data );
-    }
-
     // window.addEventListener('message', event => {
     //   console.log(event)
     //   if (event.origin != 'https://wasd.tv') { 
@@ -109,7 +94,24 @@
     setInterval(() => {
       document.querySelector('wasd-chat-body').style.height = ( window.innerHeight ) + 'px'
     }, 100)
-    
+
+
+
+    if (window.addEventListener) {
+      window.addEventListener("message", listener);
+    } else {
+      window.attachEvent("onmessage", listener);
+    }
+
+    function listener(event) {
+      console.log( "?" + event );
+      if (event.origin != 'https://wasd.tv') {
+        return;
+      }
+
+      console.log( "получено:" + event.data );
+    }
+
 
 	</script>
 </body>
