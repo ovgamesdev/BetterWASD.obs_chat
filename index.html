@@ -44,16 +44,32 @@
     settings.wasd = JSON.parse(decodeURI(new URL(document.URL).searchParams.get('settings')).replace(/HASH/ig, '#'))
     console.log(settings.wasd)
 
-    window.addEventListener('message', event => {
-      console.log(event)
-      if (event.origin.startsWith('https://wasd.tv/')) { 
-        setting.changeSettimgs(event.data)
-        console.log('changeSettimgs', event.data)
-      } else {
-        console.log('-changeSettimgs')
-        return; 
-      } 
-    }); 
+    if (window.addEventListener) {
+      window.addEventListener("message", listener);
+    } else {
+      window.attachEvent("onmessage", listener);
+    }
+
+    function listener(event) {
+      if (event.origin != 'https://wasd.tv') {
+        return;
+      }
+
+      console.log( "получено: " + event.data );
+    }
+
+    // window.addEventListener('message', event => {
+    //   console.log(event)
+    //   if (event.origin != 'https://wasd.tv') { 
+    //     console.log('-changeSettimgs')
+    //     return; 
+    //   } else {
+    //     setting.changeSettimgs(event.data)
+    //     console.log('changeSettimgs', event.data)
+    //   } 
+    // }); 
+
+
   </script>
 	<script src="index.js"></script>
 	<script src="helper/WASD.js"></script>
