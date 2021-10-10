@@ -95,8 +95,6 @@
       document.querySelector('wasd-chat-body').style.height = ( window.innerHeight ) + 'px'
     }, 100)
 
-
-
     if (window.addEventListener) {
       window.addEventListener("message", listener);
     } else {
@@ -108,9 +106,8 @@
       if (event.origin != 'https://wasd.tv') {
         return;
       }
-      console.log( "получено:", event.data );
+      setting.changeSettimgs(event.data)
     }
-
 
 	</script>
 </body>
