@@ -28,9 +28,9 @@ var setting = {
         }
 
         if (settings.wasd.st.toString() === '0') {
-          if (settings.wasd.forceResizeStickers.toString() === '1') {
+          if (settings.wasd.frs.toString() === '0') {
             cssCode += '.message__info img.sticker { display: block; height: 128px!important; width: 128px!important; margin-top: 8px; }'
-          } else if (settings.wasd.forceResizeStickers.toString() === '2') {
+          } else if (settings.wasd.frs.toString() === '1') {
             cssCode += '.message__info img.sticker { display: block; height: 56px!important; width: 56px!important; margin-top: 8px; }'
           }
         } else if (settings.wasd.st.toString() === '1') {
@@ -92,7 +92,7 @@ const socket = {
         })
         }) .then((out) => {
             this.current = out
-            this.initBot()
+            this.initChat()
         }) .catch((err) => {
             console.log(err)
             setTimeout(() => {
@@ -100,30 +100,30 @@ const socket = {
             }, 30000)
         })
     },
-    initBot() {
-        fetch(`https://wasd.tv/api/channels/${this.current.user_profile.channel_id}`)
+    initChat() {
+        fetch(`https://wasd.tv/api/v2/broadcasts/public?channel_name=${new URL(document.URL).searchParams.get('channel_name')}`)
         .then(res => res.json())
         .then((out) => {
-            if (!this.isBotInited && out.result.channel_is_live) {
+            if (!this.isBotInited && out.result.channel.channel_is_live) {
                 this.isBotInited = true
-                this.start(out.result.channel_name)
-                console.log('bot inited to channel')
-            } else if (this.isBotInited && !out.result.channel_is_live) {
+                this.start()
+                console.log('chat inited to channel')
+            } else if (this.isBotInited && !out.result.channel.channel_is_live) {
                 this.isBotInited = false
                 this.stop(12345, 'LIVE_CLOSED')
-                console.log('bot not inited to channel')
-            } else if (this.isBotInited && out.result.channel_is_live) {
-                console.log('bot worked')
+                console.log('chat not inited to channel')
+            } else if (this.isBotInited && out.result.channel.channel_is_live) {
+                console.log('chat worked')
             } else {
-                console.log('bot not worked')
+                console.log('chat not worked')
             }
             setTimeout(() => {
-                this.initBot()
-            }, 30000)
+                this.initChat()
+            }, 10000)
         }) .catch((err) => {
             setTimeout(() => {
-                this.initBot()
-            }, 30000)
+                this.initChat()
+            }, 10000)
         })  
     },
     start() {
@@ -154,41 +154,47 @@ const socket = {
                     })
                 }).then((out) => {
 
-                    socket.streamId = out.result.media_container.media_container_streams[0].stream_id
-                    socket.channelId = out.result.channel.channel_id
+                    if (out.result.media_container) {
+                        socket.streamId = out.result.media_container.media_container_streams[0].stream_id
+                        socket.channelId = out.result.channel.channel_id
 
-                    fetch(`https://wasd.tv/api/chat/streams/${socket.streamId}/messages?limit=20&offset=0`)
-                    .then(res => res.json())
-                    .then((out) => {
+                        fetch(`https://wasd.tv/api/chat/streams/${socket.streamId}/messages?limit=20&offset=0`)
+                        .then(res => res.json())
+                        .then((out) => {
 
-                        for (let date of out.result.reverse()) {
-                            if (date.info.message) {
-                                socket.onMessage(['message', date.info])
-                            }
-                            if (date.info.sticker) {
-                                socket.onSticker(['sticker', date.info])
-                            }
-                        }
-
-                        var data = `42["join",{"streamId":${socket.streamId},"channelId":${socket.channelId},"jwt":"${socket.jwt}","excludeStickers":true}]`;
-                        socket.socketd.send(data);
-
-                        setting.init()
-
-                        socket.intervalcheck = setInterval(() => {
-                            if (socket.socketd) {
-                                try {
-                                    socket.socketd.send('2')
-                                } catch {
-                                    clearInterval(socket.intervalcheck)
-                                    socket.socketd = null
-                                    console.log('[catch]', socket.socketd)
-                                    socket.start()
+                            for (let date of out.result.reverse()) {
+                                if (date.info.message) {
+                                    socket.onMessage(['message', date.info])
+                                }
+                                if (date.info.sticker) {
+                                    socket.onSticker(['sticker', date.info])
                                 }
                             }
-                        }, 5000)
 
-                    })
+                            var data = `42["join",{"streamId":${socket.streamId},"channelId":${socket.channelId},"jwt":"${socket.jwt}","excludeStickers":true}]`;
+                            socket.socketd.send(data);
+
+                            setting.init()
+
+                            socket.intervalcheck = setInterval(() => {
+                                if (socket.socketd) {
+                                    try {
+                                        socket.socketd.send('2')
+                                    } catch {
+                                        clearInterval(socket.intervalcheck)
+                                        socket.socketd = null
+                                        console.log('[catch]', socket.socketd)
+                                        socket.start()
+                                    }
+                                }
+                            }, 5000)
+                        })
+                    } else {
+                        // setTimeout(() => {
+                        //     socket.start()
+                        // }, 10000)
+                    }
+
 
                 })
             })

@@ -59,20 +59,20 @@
     async function load() {
 
       await HelperBTTV.update();
-      let bttv = new URL(document.URL).searchParams.get('bttv')
-      if (bttv) await HelperBTTV.loadEmotesUsers(bttv)
+      let bttv = settings.wasd.bttv
+      if (bttv != '') await HelperBTTV.loadEmotesUsers(bttv)
 
       await HelperFFZ.update();
-      let ffz = new URL(document.URL).searchParams.get('ffz')
-      if (ffz) await HelperFFZ.loadEmotesUsers(ffz)
+      let ffz = settings.wasd.ffz
+      if (ffz != '') await HelperFFZ.loadEmotesUsers(ffz)
 
       await HelperTV7.update();
-      let tv7 = new URL(document.URL).searchParams.get('tv7')
-      if (tv7) await HelperTV7.loadEmotesUsers(tv7)
+      let tv7 = settings.wasd.tv7
+      if (tv7 != '') await HelperTV7.loadEmotesUsers(tv7)
 
       // settings.wasd = JSON.parse(decodeURI(new URL(document.URL).searchParams.get('settings')))
 
-  		if (new URL(document.URL).searchParams.get('channel_name')) socket.start()
+  		if (new URL(document.URL).searchParams.get('channel_name')) socket.initChat()
     }
 
     load()
