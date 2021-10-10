@@ -51,11 +51,12 @@
     }
 
     function listener(event) {
+      console.log( "?" + event );
       if (event.origin != 'https://wasd.tv') {
         return;
       }
 
-      console.log( "получено: " + event.data );
+      console.log( "получено:" + event.data );
     }
 
     // window.addEventListener('message', event => {
