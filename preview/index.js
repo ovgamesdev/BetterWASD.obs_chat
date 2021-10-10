@@ -67,9 +67,9 @@ var setting = {
         }
 
         if (settings.wasd.st.toString() === '0') {
-          if (settings.wasd.frs.toString() === '1') {
+          if (settings.wasd.frs.toString() === '0') {
             cssCode += '.message__info img.sticker { display: block; height: 128px!important; width: 128px!important; margin-top: 8px; }'
-          } else if (settings.wasd.frs.toString() === '2') {
+          } else if (settings.wasd.frs.toString() === '1') {
             cssCode += '.message__info img.sticker { display: block; height: 56px!important; width: 56px!important; margin-top: 8px; }'
           }
         } else if (settings.wasd.st.toString() === '1') {
