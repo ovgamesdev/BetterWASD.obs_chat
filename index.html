@@ -45,10 +45,12 @@
     console.log(settings.wasd)
 
     window.addEventListener('message', event => {
+      console.log(event)
       if (event.origin.startsWith('https://wasd.tv/')) { 
         setting.changeSettimgs(event.data)
         console.log('changeSettimgs', event.data)
       } else {
+        console.log('-changeSettimgs')
         return; 
       } 
     }); 
