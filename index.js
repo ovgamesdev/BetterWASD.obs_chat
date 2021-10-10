@@ -11,7 +11,7 @@ var setting = {
     changeSettimgs(data) {
         settings.wasd = data
         setting.update()
-    }
+    },
     update() {
         let cssCode = ''
 
