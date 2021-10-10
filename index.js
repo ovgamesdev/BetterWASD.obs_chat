@@ -8,11 +8,6 @@ var setting = {
           setting.update();
         }
     },
-    changeSettimgs(data) {
-        settings.wasd = data
-        setting.update()
-        console.log('update settings')
-    },
     update() {
         let cssCode = ''
 

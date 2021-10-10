@@ -316,7 +316,6 @@ span.chat-message-text.stickertext {
 /* stickerovg */
 
 .stickerovg {
-  max-width: -webkit-fill-available;
   width: 28px!important;
   height: 28px!important;
   margin-top: 0px!important;
