@@ -104,17 +104,11 @@
     }
 
     function listener(event) {
-      console.log( "?" + event );
+      console.log( "?", event );
       if (event.origin != 'https://wasd.tv') {
         return;
       }
-
-      div.classList.add('block__messages__item')
-      div.innerHTML = event.data
-      messages_div.append(div)
-      document.querySelector('.block').scrollTop = document.querySelector('.block').scrollHeight
-      
-      console.log( "получено:" + event.data );
+      console.log( "получено:", event.data );
     }
 
 
