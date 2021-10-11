@@ -252,6 +252,10 @@
               <ovg-tooltip><div class="tooltip tooltip_position-top tooltip_size-small copy" style="width: 220px;bottom: 27px;text-align-last: center;"><div class="tooltip-content tooltip-content_left"> Скопировано в буфер обмена </div></div></ovg-tooltip>
             </button>
           </copy-link>
+          <not-authorized style="position: absolute;bottom: 5px;width: 100%;">
+            <button style="width: 100%;height: 30px;" class="" disabled=""> не авторизован 
+            </button>
+          </not-authorized>
       </div>
   </wasd-chat-body>
 
@@ -260,10 +264,16 @@
     settings.wasd = JSON.parse(decodeURI(new URL(document.URL).searchParams.get('settings')).replace(/HASH/ig, '#'))
     console.log(settings.wasd)
 
-    copyLink.addEventListener('click', () => {
+    let private_link = new URL(document.URL).searchParams.get('private_link')
+    let channel_name = new URL(document.URL).searchParams.get('channel_name')
+    if (private_link != 'none' && channel_name != 'none') {
+      document.querySelector('not-authorized').remove()
+    } else {
+      document.querySelector('copy-link').remove()
+    }
+
+    if ((private_link != 'none' && channel_name != 'none')) copyLink.addEventListener('click', () => {
       let data = encodeURI(JSON.stringify(settings.wasd)).replace(/#/ig, 'HASH')
-      let private_link = new URL(document.URL).searchParams.get('private-stream')
-      let channel_name = new URL(document.URL).searchParams.get('channel_name')
 
       copyLinkText.focus()
       copyLinkText.value = `https://ovgamesdev.github.io/BetterWASD.obs_chat/?channel_name=${channel_name}&private_link=${private_link}&settings=${data}`
