@@ -264,7 +264,7 @@
     settings.wasd = JSON.parse(decodeURI(new URL(document.URL).searchParams.get('settings')).replace(/HASH/ig, '#'))
     console.log(settings.wasd)
 
-    let private_link = new URL(document.URL).searchParams.get('private-stream')
+    let private_link = new URL(document.URL).searchParams.get('private_link')
     let channel_name = new URL(document.URL).searchParams.get('channel_name')
     if (private_link != 'none' && channel_name != 'none') {
       document.querySelector('not-authorized').remove()
