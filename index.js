@@ -140,23 +140,34 @@ const socket = {
                     fetch(`https://wasd.tv/api/v2/broadcasts/public?channel_name=${channel_name}`)
                     .then(res => res.json())
                     .then((out) => {
-                        if (out.result.media_container && out.result.media_container.media_container_streams) {
-                            resolve(out)
-                        } else {
 
-                            fetch('https://wasd.tv/api/v2/broadcasts/closed/'+new URL(document.URL).searchParams.get('private_link'))
-                            .then(res => res.json())
-                            .then((out) => {
-                                resolve(out)
-                            })
-                           
-                        }
+                        fetch(`https://wasd.tv/api/v2/media-containers?limit=1&offset=0&media_container_status=RUNNING&media_container_status=STOPPED&media_container_type=SINGLE&channel_id=${out.result.channel.channel_id}`)
+                        .then(res => res.json())
+                        .then((out) => {
+                            console.log(out)
+                            if (out.result[0] && out.result[0].media_container_streams[0]) {
+                                resolve(out.result[0])
+                            } else {
+
+                                fetch('https://wasd.tv/api/v2/broadcasts/closed/'+new URL(document.URL).searchParams.get('private_link'))
+                                .then(res => res.json())
+                                .then((out) => {
+                                    resolve(out.result)
+                                })
+                               
+                            }
+                        })
+
                     })
                 }).then((out) => {
-
-                    if (out.result.media_container) {
-                        socket.streamId = out.result.media_container.media_container_streams[0].stream_id
-                        socket.channelId = out.result.channel.channel_id
+                    if (out) {
+                        console.log(out, typeof out.media_container)
+                        if (typeof out.media_container == "undefined") {
+                            socket.streamId = out.media_container_streams[0].stream_id
+                        } else {
+                            socket.streamId = out.media_container.media_container_streams[0].stream_id
+                        }
+                        socket.channelId = out.stream_id
 
                         fetch(`https://wasd.tv/api/chat/streams/${socket.streamId}/messages?limit=20&offset=0`)
                         .then(res => res.json())
