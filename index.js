@@ -167,7 +167,7 @@ const socket = {
                         } else {
                             socket.streamId = out.media_container.media_container_streams[0].stream_id
                         }
-                        socket.channelId = out.stream_id
+                        socket.channelId = out.channel_id
 
                         fetch(`https://wasd.tv/api/chat/streams/${socket.streamId}/messages?limit=20&offset=0`)
                         .then(res => res.json())
@@ -311,6 +311,13 @@ const socket = {
                             break;
                         case "messageDeleted":
                             console.log(`[${JSData[0]}] ${JSData[1].ids}`, JSData);
+                            for (let id of JSData[1].ids) {
+
+                              let message = document.querySelector(`[message_id="${id}"]`)
+
+                              if (message) message.style.display = "none"
+
+                            }
                             break;
                         case "subscribe":
                             console.log(`[${JSData[0]}] ${JSData[1].user_login} - ${JSData[1].product_name}`, JSData);
@@ -382,6 +389,7 @@ const socket = {
         div.setAttribute('_ngcontent-uer-c53', '')
         div.setAttribute('username', JSData[1].user_login)
         div.setAttribute('message', JSData[1].message)
+        div.setAttribute('message_id', JSData[1].id)
         
         let role = 'user'
         if (parser.isOwner(JSData))  role += ' owner'
