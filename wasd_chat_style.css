@@ -328,3 +328,17 @@ span.chat-message-text.stickertext {
   position: relative;
   margin: -0.5rem 0px;
 }
+
+/* message deleted  */
+.block__messages__item[deleted="1"] .message-text {
+    color: rgba(var(--color-switch), .4)!important
+}
+
+.block__messages__item[deleted="2"] .message-text > span,
+.block__messages__item[deleted="2"] .message-text > img {
+    display: none!important
+}
+.block__messages__item[deleted="2"] .message-text:after {
+    content: '[сообщение удалено]';
+    color: rgba(var(--color-switch), .4)!important
+}

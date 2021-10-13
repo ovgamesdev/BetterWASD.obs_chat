@@ -143,10 +143,9 @@ const socket = {
 
                         socket.channelId = out.result.channel.channel_id
 
-                        fetch(`https://wasd.tv/api/v2/media-containers?limit=1&offset=0&media_container_status=RUNNING&media_container_type=SINGLE&channel_id=${out.result.channel.channel_id}`)
+                        fetch(`https://wasd.tv/api/v2/media-containers?limit=1&offset=0&media_container_status=RUNNING&channel_id=${out.result.channel.channel_id}`)
                         .then(res => res.json())
                         .then((out) => {
-                            console.log(out)
                             if (out.result[0] && out.result[0].media_container_streams[0]) {
                                 resolve(out.result[0])
                             } else {
@@ -163,7 +162,6 @@ const socket = {
                     })
                 }).then((out) => {
                     if (out) {
-                        console.log(out, out.channel_id)
                         if (typeof out.media_container == "undefined") {
                             socket.streamId = out.media_container_streams[0].stream_id
                         } else {
@@ -173,7 +171,6 @@ const socket = {
                         fetch(`https://wasd.tv/api/chat/streams/${socket.streamId}/messages?limit=20&offset=0`)
                         .then(res => res.json())
                         .then((out) => {
-                            console.log(out)
 
                             for (let date of out.result.reverse()) {
                                 if (date.type == "MESSAGE") {
@@ -314,8 +311,17 @@ const socket = {
                         case "messageDeleted":
                             console.log(`[${JSData[0]}] ${JSData[1].ids}`, JSData);
                             for (let id of JSData[1].ids) {
-                              let message = document.querySelector(`[message_id="${id}"]`)
-                              if (message) message.style.display = "none"
+                                let message = document.querySelector(`[message_id="${id}"]`)
+                                if (!settings.wasd.sdm) settings.wasd.sdm = '0'
+                                if (message) {
+                                    if (settings.wasd.sdm.toString() === '0') {
+                                        message.style.display = "none"
+                                    } else if (settings.wasd.sdm.toString() === '1') {
+                                        message.setAttribute('deleted', '1')
+                                    } else if (settings.wasd.sdm.toString() === '2') {
+                                        message.setAttribute('deleted', '2')
+                                    }
+                                }
                             }
                             break;
                         case "subscribe":
@@ -335,6 +341,21 @@ const socket = {
                             break;
                         case "user_ban":
                             console.log(`[${JSData[0]}] ${JSData[1].payload.user_login}`, JSData);
+                            if (JSData[1].payload.keep_messages == false) {
+                                let messages = document.querySelectorAll(`[user_id="${JSData[1].payload.user_id}"]`)
+                                if (!settings.wasd.sdm) settings.wasd.sdm = '0'
+                                
+                                for (let message of messages) {
+                                    if (settings.wasd.sdm.toString() === '0') {
+                                        message.style.display = "none"
+                                    } else if (settings.wasd.sdm.toString() === '1') {
+                                        message.setAttribute('deleted', '1')
+                                    } else if (settings.wasd.sdm.toString() === '2') {
+                                        message.setAttribute('deleted', '2')
+                                    }
+                                }
+
+                            }
                             break;
                         case "settings_update":
                             console.log(`[${JSData[0]}] ${JSData[1]}`, JSData);
@@ -442,6 +463,7 @@ const socket = {
         div.setAttribute('_ngcontent-uer-c53', '')
         div.setAttribute('username', JSData[1].user_login)
         div.setAttribute('sticker', JSData[1].sticker.sticker_image[settings.wasd.ss])
+        div.setAttribute('user_id', JSData[1].user_id)
         
         if (JSData[2]) div.setAttribute('message_id', JSData[2])
         if (JSData[1].id) div.setAttribute('message_id', JSData[1].id)
