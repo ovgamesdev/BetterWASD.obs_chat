@@ -141,7 +141,9 @@ const socket = {
                     .then(res => res.json())
                     .then((out) => {
 
-                        fetch(`https://wasd.tv/api/v2/media-containers?limit=1&offset=0&media_container_status=RUNNING&media_container_status=STOPPED&media_container_type=SINGLE&channel_id=${out.result.channel.channel_id}`)
+                        socket.channelId = out.result.channel.channel_id
+
+                        fetch(`https://wasd.tv/api/v2/media-containers?limit=1&offset=0&media_container_status=RUNNING&media_container_type=SINGLE&channel_id=${out.result.channel.channel_id}`)
                         .then(res => res.json())
                         .then((out) => {
                             console.log(out)
@@ -161,24 +163,24 @@ const socket = {
                     })
                 }).then((out) => {
                     if (out) {
-                        console.log(out, typeof out.media_container)
+                        console.log(out, out.channel_id)
                         if (typeof out.media_container == "undefined") {
                             socket.streamId = out.media_container_streams[0].stream_id
                         } else {
                             socket.streamId = out.media_container.media_container_streams[0].stream_id
                         }
-                        socket.channelId = out.channel_id
 
                         fetch(`https://wasd.tv/api/chat/streams/${socket.streamId}/messages?limit=20&offset=0`)
                         .then(res => res.json())
                         .then((out) => {
+                            console.log(out)
 
                             for (let date of out.result.reverse()) {
-                                if (date.info.message) {
-                                    socket.onMessage(['message', date.info])
+                                if (date.type == "MESSAGE") {
+                                    socket.onMessage(['message', date.info, date.id])
                                 }
-                                if (date.info.sticker) {
-                                    socket.onSticker(['sticker', date.info])
+                                if (date.type == "STICKER") {
+                                    socket.onSticker(['sticker', date.info, date.id])
                                 }
                             }
 
@@ -312,11 +314,8 @@ const socket = {
                         case "messageDeleted":
                             console.log(`[${JSData[0]}] ${JSData[1].ids}`, JSData);
                             for (let id of JSData[1].ids) {
-
                               let message = document.querySelector(`[message_id="${id}"]`)
-
                               if (message) message.style.display = "none"
-
                             }
                             break;
                         case "subscribe":
@@ -351,7 +350,7 @@ const socket = {
         this.socketd.onerror = function(error) {
             clearInterval(socket.intervalcheck)
             socket.socketd = null
-            console.log(`[error] ${error}`);
+            console.log(`[error]`, error);
             //socket.start()
         };
     },
@@ -389,7 +388,10 @@ const socket = {
         div.setAttribute('_ngcontent-uer-c53', '')
         div.setAttribute('username', JSData[1].user_login)
         div.setAttribute('message', JSData[1].message)
-        div.setAttribute('message_id', JSData[1].id)
+        div.setAttribute('user_id', JSData[1].user_id)
+
+        if (JSData[2]) div.setAttribute('message_id', JSData[2])
+        if (JSData[1].id) div.setAttribute('message_id', JSData[1].id)
         
         let role = 'user'
         if (parser.isOwner(JSData))  role += ' owner'
@@ -440,6 +442,9 @@ const socket = {
         div.setAttribute('_ngcontent-uer-c53', '')
         div.setAttribute('username', JSData[1].user_login)
         div.setAttribute('sticker', JSData[1].sticker.sticker_image[settings.wasd.ss])
+        
+        if (JSData[2]) div.setAttribute('message_id', JSData[2])
+        if (JSData[1].id) div.setAttribute('message_id', JSData[1].id)
         
         let role = 'user'
         if (parser.isOwner(JSData))  role += ' owner'
