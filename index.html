@@ -44,6 +44,7 @@
     settings.wasd = JSON.parse(decodeURI(new URL(document.URL).searchParams.get('settings')).replace(/HASH/ig, '#'))
     console.log(settings.wasd)
   </script>
+  
 	<script src="index.js"></script>
 	<script src="helper/WASD.js"></script>
   <script src="helper/BTTV.js"></script>
@@ -56,6 +57,8 @@
 
 
 	<script>
+    setting.init()
+
     async function load() {
 
       await HelperBTTV.update();
@@ -70,9 +73,8 @@
       let tv7 = settings.wasd.tv7
       if (tv7 != '') await HelperTV7.loadEmotesUsers(tv7)
 
-      // settings.wasd = JSON.parse(decodeURI(new URL(document.URL).searchParams.get('settings')))
-
   		if (new URL(document.URL).searchParams.get('channel_name')) socket.initChat()
+
     }
 
     load()

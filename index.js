@@ -76,30 +76,6 @@ const socket = {
     stream_url: null,
     isBotInited: false,
     intervals: [],
-    getCurrent() {
-        new Promise((resolve, reject) => {
-        fetch(`https://wasd.tv/api/profiles/current`)
-        .then(res => res.json())
-        .then((out) => {
-            if (out.result.user_profile.channel_id) {
-                resolve(out.result)
-            } else {
-                reject(out.result.user_role)
-            }
-        })
-        .catch((err)=>{
-            reject(err)
-        })
-        }) .then((out) => {
-            this.current = out
-            this.initChat()
-        }) .catch((err) => {
-            console.log(err)
-            setTimeout(() => {
-                this.getCurrent()
-            }, 30000)
-        })
-    },
     initChat() {
         fetch(`https://wasd.tv/api/v2/broadcasts/public?channel_name=${new URL(document.URL).searchParams.get('channel_name')}`)
         .then(res => res.json())
@@ -111,7 +87,7 @@ const socket = {
             } else if (this.isBotInited && !out.result.channel.channel_is_live) {
                 this.isBotInited = false
                 this.stop(12345, 'LIVE_CLOSED')
-                console.log('chat not inited to channel')
+                console.log('chat not inited to channel') //-
             } else if (this.isBotInited && out.result.channel.channel_is_live) {
                 console.log('chat worked')
             } else {
@@ -184,8 +160,6 @@ const socket = {
                             var data = `42["join",{"streamId":${socket.streamId},"channelId":${socket.channelId},"jwt":"${socket.jwt}","excludeStickers":true}]`;
                             socket.socketd.send(data);
 
-                            setting.init()
-
                             socket.intervalcheck = setInterval(() => {
                                 if (socket.socketd) {
                                     try {
@@ -199,12 +173,7 @@ const socket = {
                                 }
                             }, 5000)
                         })
-                    } else {
-                        // setTimeout(() => {
-                        //     socket.start()
-                        // }, 10000)
                     }
-
 
                 })
             })
@@ -217,6 +186,7 @@ const socket = {
                 console.log(`[close] Соединение закрыто чисто, код= ${e.code} причина= ${e.reason}`);
             } else if (e.wasClean) {
                 console.log(`[close] Соединение закрыто чисто, код= ${e.code} причина= ${e.reason}`);
+                socket.systemMessage('Соединение закрыто')
             } else {
                 console.log('[close] Соединение прервано');
                 socket.start()
@@ -247,23 +217,7 @@ const socket = {
                             break;
                         case "system_message":
                             console.log(`[${JSData[0]}] ${JSData[1].message}`, JSData);
-
-                            let message = document.createElement('div')
-                            message.setAttribute('_ngcontent-uer-c53', '')
-                            message.classList.add('block__messages__item')
-                            message.innerHTML = 
-                            `<div _ngcontent-uer-c53="" class="block__messages__item">
-                                <wasd-chat-system-message _ngcontent-uer-c53="" _nghost-uer-c64="">
-                                    <div _ngcontent-uer-c64="" class="block">
-                                        <div _ngcontent-uer-c64="" class="block__item">
-                                            <div _ngcontent-uer-c64="" class="block__item__text"> ${JSData[1].message} </div>
-                                        </div>
-                                    </div>
-                                </wasd-chat-system-message>
-                            </div>`
-                            messages_div.append(message)
-                            document.querySelector('.block').scrollTop = document.querySelector('.block').scrollHeight
-
+                            socket.systemMessage(JSData[1].message)
                             break;
                         case "message":
                             console.log(`[${JSData[0]}] ${JSData[1].user_login}: ${JSData[1].message}`, JSData)
@@ -279,7 +233,6 @@ const socket = {
                         case "event":
                             console.log(`[${JSData[0]}] ${JSData[1].event_type} - ${JSData[1].payload.user_login} ${JSData[1].message}`, JSData);
                             if (JSData[1].event_type == 'NEW_FOLLOWER') {
-                                // let text = settings.eventFollow[1][0].replace('{user_login}', '@'+JSData[1].payload.user_login);
                                 
                                 let div = document.createElement('div')
                                 div.setAttribute('_ngcontent-uer-c53', '')
@@ -510,7 +463,25 @@ const socket = {
         var messageText = div.querySelector('.message-text > span')
 
         div.setAttribute('mention', HelperWASD.get_user_color(messageText, div))
+    },
+    systemMessage(text) {
+        let message = document.createElement('div')
+        message.setAttribute('_ngcontent-uer-c53', '')
+        message.classList.add('block__messages__item')
+        message.innerHTML = 
+        `<div _ngcontent-uer-c53="" class="block__messages__item">
+            <wasd-chat-system-message _ngcontent-uer-c53="" _nghost-uer-c64="">
+                <div _ngcontent-uer-c64="" class="block">
+                    <div _ngcontent-uer-c64="" class="block__item">
+                        <div _ngcontent-uer-c64="" class="block__item__text"> ${text} </div>
+                    </div>
+                </div>
+            </wasd-chat-system-message>
+        </div>`
+        messages_div.append(message)
+        document.querySelector('.block').scrollTop = document.querySelector('.block').scrollHeight
     }
+
 }
 
 const parser = {
