@@ -180,6 +180,7 @@ const socket = {
     this.socketd.onclose = function(e) {
       clearInterval(socket.intervalcheck)
       socket.socketd = null
+      socket.isBotInited = false
       if (e.code == 404) {
         console.log(`[close] Соединение закрыто чисто, код= ${e.code} причина= ${e.reason}`);
       } else if (e.wasClean) {
