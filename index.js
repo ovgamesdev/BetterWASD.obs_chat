@@ -142,7 +142,7 @@ const socket = {
               socket.streamId = out.media_container.media_container_streams[0].stream_id
             }
 
-            fetch(`https://wasd.tv/api/chat/streams/${socket.streamId}/messages?limit=20&offset=0`)
+            fetch(`https://wasd.tv/api/chat/streams/${socket.streamId}/messages?limit=49&offset=0`)
             .then(res => res.json())
             .then((out) => {
 
@@ -315,6 +315,10 @@ const socket = {
               break;
           }
         }
+
+        if (messages_div.children.length >= 51) {
+          messages_div.firstElementChild.remove()
+        }
       }
     };
 
@@ -342,7 +346,7 @@ const socket = {
 
     let message_text = JSData[1].message
 
-    if (settings.wasd.fl) {
+    if (true) { // settings.wasd.fl
       message_text = HelperWASD.textToURL(message_text);
     }
 

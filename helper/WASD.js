@@ -25,27 +25,11 @@ const HelperWASD = {
     // ищем цвет по ласт сообщениям тк у api есть задержка
     let color = ''
     if (settings.wasd.catm) {
-      allNames = document.querySelectorAll('.info__text__status__name');
-      allMentions = document.querySelectorAll('.chat-message-mention');
-      for (let element of allNames) {
-        if (element.getAttribute('username')) {
-          if (channel_name.split('@').join('').toLowerCase().trim() == element.getAttribute('username').toLowerCase().trim()) {
-            color = element.style.color;
-            break;
-          }
-        }
-      }
+      let u = document.querySelector(`.info__text__status__name[username="${channel_name.trim()}"]`)
+      if (u) color = u.style.color;
       if (color != '') {
-
-        for (let element of allMentions) {
-          if (element.getAttribute('username')) {
-            if (channel_name.split('@').join('').toLowerCase().trim() == element.getAttribute('username').split('@').join('').toLowerCase().trim()) {
-              color = element.style.color;
-              break;
-            }
-          }
-
-        }
+        let m = document.querySelector(`.chat-message-mention[username="${channel_name.split('@').join('').trim()}"]`)
+        if (m) color = m.style.color;
       }
     } else {
       color = 'inherit'
@@ -77,9 +61,10 @@ const HelperWASD = {
           '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
           '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
           '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+          '(\,?)' + // ,
           '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
         if (!!pattern.test(item)) {
-          text = text.replace(item, `<a target="_break" href="${hrefhttsadd(item)}">${item}</a>`);
+          text = text.replace(item, `<a target="_break" href="${hrefhttsadd(item.replace(/,/i, ''))}">${item}</a>`);
         }
 
         function hrefhttsadd(item) {
