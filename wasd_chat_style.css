@@ -125,7 +125,6 @@
 .message__info__text[_ngcontent-uer-c51] .info__text__status__name[_ngcontent-uer-c51] {
     background-color: transparent;
     border-radius: 0;
-    cursor: pointer;
     display: flex;
     flex-wrap: nowrap;
     font-family: Roboto-Medium, sans-serif;
