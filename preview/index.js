@@ -149,14 +149,14 @@ let spawner = {
 
     div.innerHTML = `<wasd-chat-message _ngcontent-uer-c53="" _nghost-uer-c51="">
       <div _ngcontent-uer-c51="" class="message is-time">
-        <div _ngcontent-uer-c51=""style="display: none" class="message__time h-mm"> ${moment().format('h-mm')} </div>
-        <div _ngcontent-uer-c51=""style="display: none" class="message__time h-mm-ss"> ${moment().format('h-mm-ss')} </div>
-        <div _ngcontent-uer-c51=""style="display: none" class="message__time H-mm"> ${moment().format('H-mm')} </div>
-        <div _ngcontent-uer-c51=""style="display: none" class="message__time H-mm-ss"> ${moment().format('H-mm-ss')} </div>
-        <div _ngcontent-uer-c51=""style="display: none" class="message__time hh-mm"> ${moment().format('hh-mm')} </div>
-        <div _ngcontent-uer-c51=""style="display: none" class="message__time hh-mm-ss"> ${moment().format('hh-mm-ss')} </div>
-        <div _ngcontent-uer-c51=""style="display: none" class="message__time HH-mm"> ${moment().format('HH-mm')} </div>
-        <div _ngcontent-uer-c51=""style="display: none" class="message__time HH-mm-ss"> ${moment().format('HH-mm-ss')} </div>
+        <div _ngcontent-uer-c51=""style="display: none" class="message__time h-mm"> ${moment().format('h:mm')} </div>
+        <div _ngcontent-uer-c51=""style="display: none" class="message__time h-mm-ss"> ${moment().format('h:mm:ss')} </div>
+        <div _ngcontent-uer-c51=""style="display: none" class="message__time H-mm"> ${moment().format('H:mm')} </div>
+        <div _ngcontent-uer-c51=""style="display: none" class="message__time H-mm-ss"> ${moment().format('H:mm:ss')} </div>
+        <div _ngcontent-uer-c51=""style="display: none" class="message__time hh-mm"> ${moment().format('hh:mm')} </div>
+        <div _ngcontent-uer-c51=""style="display: none" class="message__time hh-mm-ss"> ${moment().format('hh:mm:ss')} </div>
+        <div _ngcontent-uer-c51=""style="display: none" class="message__time HH-mm"> ${moment().format('HH:mm')} </div>
+        <div _ngcontent-uer-c51=""style="display: none" class="message__time HH-mm-ss"> ${moment().format('HH:mm:ss')} </div>
         <!---->
         <div _ngcontent-uer-c51="" class="message__img"><img _ngcontent-uer-c51="" wasdlazyvisibleclass="visible" alt="" src="https://static.wasd.tv/avatars/user/${data['icon']}.png" class="visible"></div>
         <!---->
