@@ -105,7 +105,6 @@
 }
 
 .message__info__text[_ngcontent-uer-c51] {
-    color: rgba(var(--wasd-color-switch--rgb), .88);
     font-size: 14px;
     line-height: 1.43;
     word-break: break-word

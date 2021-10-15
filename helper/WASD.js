@@ -39,7 +39,6 @@ const HelperWASD = {
   get_user_color(messageText, div) {
   	let bl = ''
 	  if (messageText) {
-	    
       messageText.innerHTML = messageText.innerHTML.replace(/@[a-zA-Z0-9_-]+/ig, function($1) {
         return `<span style='color: ${HelperWASD.usercolor($1.trim())};' class='chat-message-mention' username="${$1.toLowerCase()}">@${$1.trim().split('@').join('').trim()}</span>`;
       });

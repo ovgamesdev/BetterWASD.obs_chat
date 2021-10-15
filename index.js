@@ -42,6 +42,16 @@ var setting = {
       cssCode += '.sticker_text { display: inline!important; }';
     }
 
+    if (!settings.wasd.anim) settings.wasd.anim = '0'
+    if (!settings.wasd.nma) settings.wasd.nma = '15000'
+    if (settings.wasd.anim.toString() === '0') {
+      let anim0 = `.block__messages__item {animation: fadeOut 0s ease ${settings.wasd.nma.toString()}ms forwards;-webkit-animation: fadeOut 0s ease ${settings.wasd.nma.toString()}ms forwards;}`
+      cssCode += `${settings.wasd.nma.toString() == '0' ? '' : `${anim0}`}`
+    } else if (settings.wasd.anim.toString() === '1') {
+      let anim1 = `${settings.wasd.nma.toString() == '0' ? '' : `, fadeOut 0.5s ease ${settings.wasd.nma.toString()}ms forwards`}`
+      cssCode += `.block__messages__item {animation: fadeInRight .3s ease forwards${anim1};-webkit-animation: fadeInRight .3s ease forwards${anim1};}`
+    }
+
     if (settings.wasd.hmb) {
       cssCode += '.chat-message-mention { font-weight: 700!important; }';
     }
@@ -51,6 +61,9 @@ var setting = {
     }
 
     cssCode += `div.message-text > span > a { color: ${settings.wasd.lc != '#000000' ? settings.wasd.lc : 'inherit'}; }`;
+
+    if (!settings.wasd.mtc) settings.wasd.mtc = 'rgba(var(--wasd-color-switch--rgb), .88)'
+    cssCode += `.message__info__text {color: ${settings.wasd.mtc};}`
 
     if (setting.style) {
       if (typeof setting.style.styleSheet !== 'undefined') {

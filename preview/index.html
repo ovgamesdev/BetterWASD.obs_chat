@@ -21,6 +21,7 @@
 
   <link href="https://static.wasd.tv/icons/css/wasd-font.css" rel="stylesheet">
   <link href="../wasd_chat_style.css" rel="stylesheet">
+  <link href="../animations.css" rel="stylesheet">
   <link href="../ovg_tooltip.css" rel="stylesheet">
 </head>
 <body style="margin: 0 8px 0 8px;">
@@ -301,6 +302,27 @@
 
 
 	<script>
+
+    async function load() {
+
+      await HelperBTTV.update();
+      let bttv = settings.wasd.bttv
+      if (bttv != '') await HelperBTTV.loadEmotesUsers(bttv)
+
+      await HelperFFZ.update();
+      let ffz = settings.wasd.ffz
+      if (ffz != '') await HelperFFZ.loadEmotesUsers(ffz)
+
+      await HelperTV7.update();
+      let tv7 = settings.wasd.tv7
+      if (tv7 != '') await HelperTV7.loadEmotesUsers(tv7)
+
+      spawner.start()
+
+    }
+
+    load()
+
 
     document.querySelector('wasd-chat-body').style.height = ( window.innerHeight ) + 'px'
     setInterval(() => {
