@@ -194,6 +194,10 @@ const socket = {
 
     this.socketd.onmessage = function(e) {
         
+      if (messages_div.children.length >= 51) {
+        messages_div.firstElementChild.remove()
+      }
+
       if (e.data != 3) {
         var JSData;
         if (e.data.indexOf('[') != -1 && e.data.indexOf('[') < e.data.indexOf('{')) {
@@ -266,7 +270,7 @@ const socket = {
                 if (!settings.wasd.sdm) settings.wasd.sdm = '0'
                 if (message) {
                   if (settings.wasd.sdm.toString() === '0') {
-                    message.style.display = "none"
+                    message.remove()
                   } else if (settings.wasd.sdm.toString() === '1') {
                     message.setAttribute('deleted', '1')
                   } else if (settings.wasd.sdm.toString() === '2') {
@@ -317,9 +321,6 @@ const socket = {
           }
         }
 
-        if (messages_div.children.length >= 51) {
-          messages_div.firstElementChild.remove()
-        }
       }
     };
 
@@ -388,14 +389,11 @@ const socket = {
           <div _ngcontent-uer-c51="" class="message__info__text">
             <div _ngcontent-uer-c51="" class="info__text__status">
               ${parser.isSub(JSData) ? `<div _ngcontent-uer-c51="" class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i _ngcontent-uer-c51="" class="icon wasd-icons-star"></i></div>` : ``}
-              <div _ngcontent-uer-c51="" username="${JSData[1].user_login}" class="info__text__status__name ${parser.isMod(JSData) ? 'is-moderator' : ''}${parser.isOwner(JSData) ? 'is-owner' : ''}${parser.isAdmin(JSData) ? 'is-admin' : ''}" style="${parser.isMod(JSData) || parser.isOwner(JSData) || parser.isAdmin(JSData) ? '' : `color: ${parser.color(JSData)}`}">${parser.isMod(JSData) ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${parser.isOwner(JSData) ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${parser.isAdmin(JSData) ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>
+              <div _ngcontent-uer-c51="" username="${JSData[1].user_login.toLowerCase()}" class="info__text__status__name ${parser.isMod(JSData) ? 'is-moderator' : ''}${parser.isOwner(JSData) ? 'is-owner' : ''}${parser.isAdmin(JSData) ? 'is-admin' : ''}" style="${parser.isMod(JSData) || parser.isOwner(JSData) || parser.isAdmin(JSData) ? '' : `color: ${parser.color(JSData)}`}">${parser.isMod(JSData) ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${parser.isOwner(JSData) ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${parser.isAdmin(JSData) ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>
             </div>
 
             <div _ngcontent-uer-c51="" class="message-text"><span _ngcontent-uer-c51=""> ${message_text} </span>
             </div>
-            <!---->
-          </div>
-          <div _ngcontent-uer-c51="" class="message__info__icon" id="contextMenuItem48"><i _ngcontent-uer-c51="" class="icon wasd-icons-dots-vert" style="display: none;"></i>
             <!---->
           </div>
           <!---->
@@ -458,16 +456,13 @@ const socket = {
           <div _ngcontent-uer-c51="" class="message__info__text">
             <div _ngcontent-uer-c51="" class="info__text__status">
               ${parser.isSub(JSData) ? `<div _ngcontent-uer-c51="" class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i _ngcontent-uer-c51="" class="icon wasd-icons-star"></i></div>` : ``}
-              <div _ngcontent-uer-c51="" username="${JSData[1].user_login}" class="info__text__status__name ${parser.isMod(JSData) ? 'is-moderator' : ''}${parser.isOwner(JSData) ? 'is-owner' : ''}${parser.isAdmin(JSData) ? 'is-admin' : ''}" style="${parser.isMod(JSData) || parser.isOwner(JSData) || parser.isAdmin(JSData) ? '' : `color: ${parser.color(JSData)}`}">${parser.isMod(JSData) ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${parser.isOwner(JSData) ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${parser.isAdmin(JSData) ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>
+              <div _ngcontent-uer-c51="" username="${JSData[1].user_login.toLowerCase()}" class="info__text__status__name ${parser.isMod(JSData) ? 'is-moderator' : ''}${parser.isOwner(JSData) ? 'is-owner' : ''}${parser.isAdmin(JSData) ? 'is-admin' : ''}" style="${parser.isMod(JSData) || parser.isOwner(JSData) || parser.isAdmin(JSData) ? '' : `color: ${parser.color(JSData)}`}">${parser.isMod(JSData) ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${parser.isOwner(JSData) ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${parser.isAdmin(JSData) ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>
             </div>
 
             <div _ngcontent-uer-c51="" class="message-text"><span _ngcontent-uer-c51=""> </span>
               <img _ngcontent-uer-c51="" alt="sticker" class="sticker" src="${JSData[1].sticker.sticker_image[settings.wasd.ss]}">
               <span class="chat-message-text stickertext sticker_text">Стикер</span>
             </div>
-            <!---->
-          </div>
-          <div _ngcontent-uer-c51="" class="message__info__icon" id="contextMenuItem48"><i _ngcontent-uer-c51="" class="icon wasd-icons-dots-vert" style="display: none;"></i>
             <!---->
           </div>
           <!---->

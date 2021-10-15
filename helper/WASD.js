@@ -25,10 +25,10 @@ const HelperWASD = {
     // ищем цвет по ласт сообщениям тк у api есть задержка
     let color = ''
     if (settings.wasd.catm) {
-      let u = document.querySelector(`.info__text__status__name[username="${channel_name.trim()}"]`)
+      let u = document.querySelector(`.info__text__status__name[username="${channel_name.trim().toLowerCase().split('@').join('')}"]`)
       if (u) color = u.style.color;
       if (color != '') {
-        let m = document.querySelector(`.chat-message-mention[username="${channel_name.split('@').join('').trim()}"]`)
+        let m = document.querySelector(`.chat-message-mention[username="${channel_name.trim().toLowerCase()}"]`)
         if (m) color = m.style.color;
       }
     } else {
@@ -41,7 +41,7 @@ const HelperWASD = {
 	  if (messageText) {
 	    
       messageText.innerHTML = messageText.innerHTML.replace(/@[a-zA-Z0-9_-]+/ig, function($1) {
-        return `<span style='color: ${HelperWASD.usercolor($1.trim())};' class='chat-message-mention' username="${$1}">@${$1.trim().split('@').join('').trim()}</span>`;
+        return `<span style='color: ${HelperWASD.usercolor($1.trim())};' class='chat-message-mention' username="${$1.toLowerCase()}">@${$1.trim().split('@').join('').trim()}</span>`;
       });
 
       div.querySelectorAll('.chat-message-mention').forEach(element => {
@@ -54,6 +54,7 @@ const HelperWASD = {
 	},
   textToURL(text) {
     if (text) {
+      if (typeof settings.wasd.sl == 'undefined') settings.wasd.sl = '0'
       for (let item of text.split(' ')) {
         let itemhref;
         var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
@@ -64,7 +65,13 @@ const HelperWASD = {
           '(\,?)' + // ,
           '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
         if (!!pattern.test(item)) {
-          text = text.replace(item, `<a target="_break" href="${hrefhttsadd(item.replace(/,/i, ''))}">${item}</a>`);
+          text = text.replace(item, () => {
+            if (settings.wasd.sl.toString() == '0') {
+              return `<a target="_break" href="${hrefhttsadd(item.replace(/,/i, ''))}">${item}</a>`
+            } else if (settings.wasd.sl.toString() == '1') {
+              return `[ссылка удалена]`
+            }
+          });
         }
 
         function hrefhttsadd(item) {
