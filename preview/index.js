@@ -120,7 +120,7 @@ var setting = {
 let spawner = {
   newMessage() {
     let data = list.users[spawner.randomNumber(1, 20)]
-    let message = list.message[spawner.randomNumber(1, 27)]
+    let message = list.message[spawner.randomNumber(1, 36)]
     const userColors = ["#7fba40", "#1c3fc8", "#a5276d", "#913ca7", "#4332b6", "#266bc5", "#5bc3c1", "#d87539", "#a9ad47", "#3ca13b", "#4db89a", "#6a4691", "#f5a623", "#e7719e", "#9fcbef", "#7b4b4b"];
 
 
@@ -358,7 +358,16 @@ let list = {
     '24': 'APEX',
     '25': 'F',
     '26': 'чек google.com или https://google.com',
-    '27': 'уффффффффф ля'
+    '27': 'уффффффффф ля',
+    '28': '!help',
+    '29': '+5кк, сюда',
+    '30': 'чел',
+    '31': 'OMEGALUL',
+    '32': 'упади',
+    '33': 'бб',
+    '34': 'кинь рейд мне',
+    '35': 'LUL LUL',
+    '36': 'Agakakskagesh Agakakskagesh Agakakskagesh Agakakskagesh Agakakskagesh Agakakskagesh Agakakskagesh Agakakskagesh'
   },
   userid: {
     '@Gigadude': '62820',
