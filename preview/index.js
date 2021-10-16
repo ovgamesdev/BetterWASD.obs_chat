@@ -142,10 +142,20 @@ let spawner = {
     div.setAttribute('role', data['role'])
     div.classList.add('block__messages__item')
 
-    let isOwner = data['role'].indexOf('owner') != -1
-    let isMod = data['role'].indexOf('moderator') != -1
-    let isSub = data['role'].indexOf('sub') != -1
-    let isAdmin = data['role'].indexOf('admin') != -1
+    let isOwner = data['role'].indexOf('owner')     != -1
+    let isMod   = data['role'].indexOf('moderator') != -1
+    let isSub   = data['role'].indexOf('sub')       != -1
+    let isAdmin = data['role'].indexOf('admin')     != -1
+
+    if (typeof settings.wasd.sbo == 'undefined') settings.wasd.sbo = true
+    if (typeof settings.wasd.sbm == 'undefined') settings.wasd.sbm = true
+    if (typeof settings.wasd.sbs == 'undefined') settings.wasd.sbs = true
+    if (typeof settings.wasd.sba == 'undefined') settings.wasd.sba = true
+
+    if (!settings.wasd.sbo) isOwner = false
+    if (!settings.wasd.sbm) isMod   = false
+    if (!settings.wasd.sbs) isSub   = false
+    if (!settings.wasd.sba) isAdmin = false
 
     div.innerHTML = `<wasd-chat-message _ngcontent-uer-c53="" _nghost-uer-c51="">
       <div _ngcontent-uer-c51="" class="message is-time">
@@ -347,7 +357,7 @@ let list = {
     '13': 'ЭТО ЛОВУШКА',
     '14': 'Оно того не стоит',
     '15': 'Толкько зашел',
-    '16': ':D',
+    '16': 'D:',
     '17': 'KEKW',
     '18': 'да',
     '19': 'Забавный факт',

@@ -386,13 +386,35 @@ const socket = {
 
     if (JSData[2]) div.setAttribute('message_id', JSData[2])
     if (JSData[1].id) div.setAttribute('message_id', JSData[1].id)
-    
-    let role = 'user'
-    if (parser.isOwner(JSData))  role += ' owner'
-    if (parser.isMod(JSData))    role += ' moderator'
-    if (parser.isSub(JSData))    role += ' sub'
-    if (parser.isAdmin(JSData))  role += ' admin'
+
+    let isOwner, isMod, isSub, isAdmin, role = 'user'
+    if (parser.isOwner(JSData)) {
+      role += ' owner'
+      isOwner = true
+    }
+    if (parser.isMod(JSData)) {
+      role += ' moderator'
+      isMod   = true
+    }
+    if (parser.isSub(JSData)) {
+      role += ' sub'
+      isSub   = true
+    }
+    if (parser.isAdmin(JSData)) {
+      role += ' admin'
+      isAdmin = true
+    }
     div.setAttribute('role', role)
+
+    if (typeof settings.wasd.sbo == 'undefined') settings.wasd.sbo = true
+    if (typeof settings.wasd.sbm == 'undefined') settings.wasd.sbm = true
+    if (typeof settings.wasd.sbs == 'undefined') settings.wasd.sbs = true
+    if (typeof settings.wasd.sba == 'undefined') settings.wasd.sba = true
+
+    if (!settings.wasd.sbo) isOwner = false
+    if (!settings.wasd.sbm) isMod   = false
+    if (!settings.wasd.sbs) isSub   = false
+    if (!settings.wasd.sba) isAdmin = false
 
     div.classList.add('block__messages__item')
     div.innerHTML = `<wasd-chat-message _ngcontent-uer-c53="" _nghost-uer-c51="">
@@ -405,8 +427,8 @@ const socket = {
         <div _ngcontent-uer-c51="" class="message__info">
           <div _ngcontent-uer-c51="" class="message__info__text">
             <div _ngcontent-uer-c51="" class="info__text__status">
-              ${parser.isSub(JSData) ? `<div _ngcontent-uer-c51="" class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i _ngcontent-uer-c51="" class="icon wasd-icons-star"></i></div>` : ``}
-              <div _ngcontent-uer-c51="" username="${JSData[1].user_login.toLowerCase()}" class="info__text__status__name ${parser.isMod(JSData) ? 'is-moderator' : ''}${parser.isOwner(JSData) ? 'is-owner' : ''}${parser.isAdmin(JSData) ? 'is-admin' : ''}" style="${parser.isMod(JSData) || parser.isOwner(JSData) || parser.isAdmin(JSData) ? '' : `color: ${parser.color(JSData)}`}">${parser.isMod(JSData) ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${parser.isOwner(JSData) ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${parser.isAdmin(JSData) ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>
+              ${isSub ? `<div _ngcontent-uer-c51="" class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i _ngcontent-uer-c51="" class="icon wasd-icons-star"></i></div>` : ``}
+              <div _ngcontent-uer-c51="" username="${JSData[1].user_login.toLowerCase()}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>
             </div>
 
             <div _ngcontent-uer-c51="" class="message-text"><span _ngcontent-uer-c51=""> ${message_text} </span>
@@ -454,12 +476,34 @@ const socket = {
     if (JSData[2]) div.setAttribute('message_id', JSData[2])
     if (JSData[1].id) div.setAttribute('message_id', JSData[1].id)
     
-    let role = 'user'
-    if (parser.isOwner(JSData))  role += ' owner'
-    if (parser.isMod(JSData))    role += ' moderator'
-    if (parser.isSub(JSData))    role += ' sub'
-    if (parser.isAdmin(JSData))  role += ' admin'
+    let isOwner, isMod, isSub, isAdmin, role = 'user'
+    if (parser.isOwner(JSData)) {
+      role += ' owner'
+      isOwner = true
+    }
+    if (parser.isMod(JSData)) {
+      role += ' moderator'
+      isMod   = true
+    }
+    if (parser.isSub(JSData)) {
+      role += ' sub'
+      isSub   = true
+    }
+    if (parser.isAdmin(JSData)) {
+      role += ' admin'
+      isAdmin = true
+    }
     div.setAttribute('role', role)
+
+    if (typeof settings.wasd.sbo == 'undefined') settings.wasd.sbo = true
+    if (typeof settings.wasd.sbm == 'undefined') settings.wasd.sbm = true
+    if (typeof settings.wasd.sbs == 'undefined') settings.wasd.sbs = true
+    if (typeof settings.wasd.sba == 'undefined') settings.wasd.sba = true
+
+    if (!settings.wasd.sbo) isOwner = false
+    if (!settings.wasd.sbm) isMod   = false
+    if (!settings.wasd.sbs) isSub   = false
+    if (!settings.wasd.sba) isAdmin = false
 
     div.classList.add('block__messages__item')
     div.innerHTML = `<wasd-chat-message _ngcontent-uer-c53="" _nghost-uer-c51="">
@@ -472,8 +516,8 @@ const socket = {
         <div _ngcontent-uer-c51="" class="message__info">
           <div _ngcontent-uer-c51="" class="message__info__text">
             <div _ngcontent-uer-c51="" class="info__text__status">
-              ${parser.isSub(JSData) ? `<div _ngcontent-uer-c51="" class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i _ngcontent-uer-c51="" class="icon wasd-icons-star"></i></div>` : ``}
-              <div _ngcontent-uer-c51="" username="${JSData[1].user_login.toLowerCase()}" class="info__text__status__name ${parser.isMod(JSData) ? 'is-moderator' : ''}${parser.isOwner(JSData) ? 'is-owner' : ''}${parser.isAdmin(JSData) ? 'is-admin' : ''}" style="${parser.isMod(JSData) || parser.isOwner(JSData) || parser.isAdmin(JSData) ? '' : `color: ${parser.color(JSData)}`}">${parser.isMod(JSData) ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${parser.isOwner(JSData) ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${parser.isAdmin(JSData) ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>
+              ${isSub ? `<div _ngcontent-uer-c51="" class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i _ngcontent-uer-c51="" class="icon wasd-icons-star"></i></div>` : ``}
+              <div _ngcontent-uer-c51="" username="${JSData[1].user_login.toLowerCase()}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>
             </div>
 
             <div _ngcontent-uer-c51="" class="message-text"><span _ngcontent-uer-c51=""> </span>
