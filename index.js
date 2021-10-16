@@ -288,6 +288,8 @@ const socket = {
                     message.setAttribute('deleted', '1')
                   } else if (settings.wasd.sdm.toString() === '2') {
                     message.setAttribute('deleted', '2')
+                  } else if (settings.wasd.sdm.toString() === '3') {
+                    message.setAttribute('deleted', '3')
                   }
                 }
               }
@@ -320,6 +322,8 @@ const socket = {
                     message.setAttribute('deleted', '1')
                   } else if (settings.wasd.sdm.toString() === '2') {
                     message.setAttribute('deleted', '2')
+                  } else if (settings.wasd.sdm.toString() === '3') {
+                    message.setAttribute('deleted', '3')
                   }
                 }
 

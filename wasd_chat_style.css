@@ -332,11 +332,16 @@ span.chat-message-text.stickertext {
     color: rgba(var(--color-switch), .4)!important
 }
 
-.block__messages__item[deleted="2"] .message-text > span,
-.block__messages__item[deleted="2"] .message-text > img {
+.block__messages__item[deleted="2"] .message-text {
+    color: rgba(var(--color-switch), .4)!important;
+    text-decoration: line-through!important;
+}
+
+.block__messages__item[deleted="3"] .message-text > span,
+.block__messages__item[deleted="3"] .message-text > img {
     display: none!important
 }
-.block__messages__item[deleted="2"] .message-text:after {
+.block__messages__item[deleted="3"] .message-text:after {
     content: '[сообщение удалено]';
     color: rgba(var(--color-switch), .4)!important
 }

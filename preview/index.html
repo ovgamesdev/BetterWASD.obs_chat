@@ -241,6 +241,37 @@
                                   </div>
                               </wasd-chat-message>
                           </div>
+                          <div _ngcontent-uer-c53="" username="test" message="япи" role="user owner" class="block__messages__item deleted" mention="">
+                              <wasd-chat-message _ngcontent-uer-c53="" _nghost-uer-c51="">
+                                  <div _ngcontent-uer-c51="" class="message is-time">
+                                      <div _ngcontent-uer-c51=""style="display: none" class="message__time h-mm"> 2:19 </div>
+                                      <div _ngcontent-uer-c51=""style="display: none" class="message__time h-mm-ss"> 2:19:35 </div>
+                                      <div _ngcontent-uer-c51=""style="display: none" class="message__time H-mm"> 14:19 </div>
+                                      <div _ngcontent-uer-c51=""style="display: none" class="message__time H-mm-ss"> 14:19:35 </div>
+                                      <div _ngcontent-uer-c51=""style="display: none" class="message__time hh-mm"> 02:19 </div>
+                                      <div _ngcontent-uer-c51=""style="display: none" class="message__time hh-mm-ss"> 02:19:35 </div>
+                                      <div _ngcontent-uer-c51=""style="display: none" class="message__time HH-mm"> 14:19 </div>
+                                      <div _ngcontent-uer-c51=""style="display: none" class="message__time HH-mm-ss"> 14:19:35 </div>
+                                      <!---->
+                                      <div _ngcontent-uer-c51="" class="message__img"><img _ngcontent-uer-c51="" wasdlazyvisibleclass="visible" alt="" src="https://static.wasd.tv/avatars/user/1795.png" class="visible"></div>
+                                      <!---->
+                                      <!---->
+                                      <div _ngcontent-uer-c51="" class="message__info">
+                                          <div _ngcontent-uer-c51="" class="message__info__text">
+                                              <div _ngcontent-uer-c51="" class="info__text__status">
+
+                                                  <div _ngcontent-uer-c51="" username="test" class="info__text__status__name is-owner" style=""><i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i> test </div>
+                                              </div>
+
+                                              <div _ngcontent-uer-c51="" class="message-text"><span _ngcontent-uer-c51=""> япи </span>
+                                              </div>
+                                              <!---->
+                                          </div>
+                                          <!---->
+                                      </div>
+                                  </div>
+                              </wasd-chat-message>
+                          </div>
 
                       </div>
                   </div>
@@ -343,6 +374,18 @@
     }
 
     setting.init()
+
+    message = messages_div.querySelector('.block__messages__item.deleted')
+    if (settings.wasd.sdm.toString() === '0') {
+      message.remove()
+    } else if (settings.wasd.sdm.toString() === '1') {
+      message.setAttribute('deleted', '1')
+    } else if (settings.wasd.sdm.toString() === '2') {
+      message.setAttribute('deleted', '2')
+    } else if (settings.wasd.sdm.toString() === '3') {
+      message.setAttribute('deleted', '3')
+    }
+
 
 	</script>
 </body>
