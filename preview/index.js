@@ -194,6 +194,8 @@ let spawner = {
     document.querySelector('.block').scrollTop = document.querySelector('.block').scrollHeight
   },
   start() {
+    loader.updateStatus('Генирация сообщений') // log
+    this.newMessage()
     setInterval(() => {
       this.newMessage()
     }, 1500)
@@ -382,5 +384,21 @@ let list = {
     '@Gigadude': '62820',
     '@Mayflower': '102201',
     '@OMFBot': '90357',
+  }
+}
+
+const loader = {
+  div: document.querySelector('#loader_div'),
+  create() {
+
+  },
+  updateStatus(title='', description='') {
+    if (loader.div) loader.div.querySelector('.block__item__text').textContent = `${title} ${description ? `(${description})` : ''}`
+  },
+  end() {
+    if (loader.div) setTimeout(() => {
+      loader.div.style['animation']         = 'animation: fadeOut 0.5s ease 30000ms forwards;'
+      loader.div.style['-webkit-animation'] = 'animation: fadeOut 0.5s ease 30000ms forwards;'
+    }, 1500)
   }
 }
