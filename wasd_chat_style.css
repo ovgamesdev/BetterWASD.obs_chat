@@ -42,7 +42,6 @@
 .block-wrapper[_ngcontent-uer-c53]   .block__messages[_ngcontent-uer-c53] {
   display: flex;
   flex-direction: column;
-  margin-top: 14px;
 }
 
 /*message*/
@@ -329,21 +328,21 @@ span.chat-message-text.stickertext {
 
 /* message deleted  */
 .block__messages__item[deleted="1"] .message-text {
-    color: rgba(var(--color-switch), .4)!important
+  color: rgba(var(--color-switch), .4)!important
 }
 
 .block__messages__item[deleted="2"] .message-text {
-    color: rgba(var(--color-switch), .4)!important;
-    text-decoration: line-through!important;
+  color: rgba(var(--color-switch), .4)!important;
+  text-decoration: line-through!important;
 }
 
 .block__messages__item[deleted="3"] .message-text > span,
 .block__messages__item[deleted="3"] .message-text > img {
-    display: none!important
+  display: none!important
 }
 .block__messages__item[deleted="3"] .message-text:after {
-    content: '[сообщение удалено]';
-    color: rgba(var(--color-switch), .4)!important
+  content: '[сообщение удалено]';
+  color: rgba(var(--color-switch), .4)!important
 }
 
 /* badges */
@@ -367,4 +366,9 @@ span.chat-message-text.stickertext {
   margin-left: 0;
   margin-right: 0;
   transform: rotate(180deg) translateX(-0.5px);
+}
+
+.block-wrapper[_ngcontent-uer-c53] .block__messages[_ngcontent-uer-c53] {
+  height: 100%;
+  justify-content: flex-end;
 }

@@ -6,10 +6,12 @@ const HelperFFZ = {
   	let u = users.split(';')
   	let index = 0
 	  console.log('load ffz', u)
+    loader.updateStatus('Загрузка FFZ эмоций') // log
   	return new Promise((resolve) => {
 	  	for (let username of u) {
 	  		HelperFFZ.tryAddUser(username).finally(() => {
 	  			index ++
+          loader.updateStatus('Загрузка FFZ эмоций', `${index}/${u.length}`) // log
 	  			if (index == u.length) {
   					resolve()
 	  			}

@@ -6,10 +6,12 @@ const HelperBTTV = {
   	let u = users.split(';')
   	let index = 0
 	  console.log('load bttv', u)
+    loader.updateStatus('Загрузка BTTV эмоций') // log
   	return new Promise((resolve) => {
 	  	for (let username of u) {
 	  		HelperBTTV.tryAddUser(username).finally(() => {
 	  			index ++
+          loader.updateStatus('Загрузка BTTV эмоций', `${index}/${u.length}`) // log
 	  			if (index == u.length) {
   					resolve()
 	  			}

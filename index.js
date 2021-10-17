@@ -90,6 +90,7 @@ const socket = {
   isBotInited: false,
   intervals: [],
   initChat() {
+    loader.updateStatus('Получаем данные пользователя', new URL(document.URL).searchParams.get('channel_name')) // log
     $.ajax({
       url: `https://wasd.tv/api/v2/broadcasts/public?channel_name=${new URL(document.URL).searchParams.get('channel_name')}`,
       headers: { 'Access-Control-Allow-Origin': 'https://wasd.tv' },
@@ -124,6 +125,7 @@ const socket = {
     this.socketd = new WebSocket("wss://chat.wasd.tv/socket.io/?EIO=3&transport=websocket");
 
     this.socketd.onopen = function(e) {
+      loader.updateStatus('Получение чата-токена') // log
       $.ajax({
         url: `https://wasd.tv/api/auth/chat-token`,
         headers: { 'Access-Control-Allow-Origin': 'https://wasd.tv' },
@@ -137,6 +139,8 @@ const socket = {
               success: function(out) {
 
                 socket.channelId = out.result.channel.channel_id
+
+                loader.updateStatus('Загрузка истории сообщений') // log
 
                 $.ajax({
                   url: `https://wasd.tv/api/v2/media-containers?limit=1&offset=0&media_container_status=RUNNING&channel_id=${out.result.channel.channel_id}`,
@@ -182,6 +186,7 @@ const socket = {
                     }
                   }
 
+                  loader.updateStatus('Подключение к WebSocket') // log
                   var data = `42["join",{"streamId":${socket.streamId},"channelId":${socket.channelId},"jwt":"${socket.jwt}","excludeStickers":true}]`;
                   socket.socketd.send(data);
 
@@ -246,6 +251,7 @@ const socket = {
           switch (JSData[0]) {
             case "joined":
               console.log(`[${JSData[0]}] ${JSData[1].user_channel_role}`, JSData);
+              loader.updateStatus('WebSocket подключен', JSData[1].user_channel_role) // log
               break;
             case "system_message":
               console.log(`[${JSData[0]}] ${JSData[1].message}`, JSData);
@@ -650,4 +656,20 @@ const parser = {
     }
   },
 
+}
+
+const loader = {
+  div: document.querySelector('#loader_div'),
+  create() {
+
+  },
+  updateStatus(title='', description='') {
+    if (loader.div) loader.div.querySelector('.block__item__text').textContent = `${title} ${description ? `(${description})` : ''}`
+  },
+  end() {
+    if (loader.div) setTimeout(() => {
+      loader.div.style['animation']         = 'animation: fadeOut 0.5s ease 30000ms forwards;'
+      loader.div.style['-webkit-animation'] = 'animation: fadeOut 0.5s ease 30000ms forwards;'
+    }, 1500)
+  }
 }

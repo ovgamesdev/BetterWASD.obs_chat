@@ -6,10 +6,12 @@ const HelperTV7 = {
   	let u = users.split(';')
   	let index = 0
 	  console.log('load 7tv', u)
+    loader.updateStatus('Загрузка 7TV эмоций') // log
   	return new Promise((resolve) => {
 	  	for (let username of u) {
 	  		HelperTV7.tryAddUser(username).finally(() => {
 	  			index ++
+          loader.updateStatus('Загрузка 7TV эмоций', `${index}/${u.length}`) // log
 	  			if (index == u.length) {
   					resolve()
 	  			}
