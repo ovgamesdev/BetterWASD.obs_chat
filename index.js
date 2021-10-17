@@ -90,104 +90,121 @@ const socket = {
   isBotInited: false,
   intervals: [],
   initChat() {
-    fetch(`https://wasd.tv/api/v2/broadcasts/public?channel_name=${new URL(document.URL).searchParams.get('channel_name')}`)
-    .then(res => res.json())
-    .then((out) => {
-      if (!this.isBotInited && out.result.channel.channel_is_live) {
-        this.isBotInited = true
-        this.start()
-        console.log('chat inited to channel')
-      } else if (this.isBotInited && !out.result.channel.channel_is_live) {
-        this.isBotInited = false
-        this.stop(12345, 'LIVE_CLOSED')
-        console.log('chat not inited to channel') //-
-      } else if (this.isBotInited && out.result.channel.channel_is_live) {
-        console.log('chat worked')
-      } else {
-        console.log('chat not worked')
+    $.ajax({
+      url: `https://wasd.tv/api/v2/broadcasts/public?channel_name=${new URL(document.URL).searchParams.get('channel_name')}`,
+      headers: { 'Access-Control-Allow-Origin': 'https://wasd.tv' },
+      success: function(out) {
+        if (!socket.isBotInited && out.result.channel.channel_is_live) {
+          socket.isBotInited = true
+          socket.start()
+          console.log('chat inited to channel')
+        } else if (socket.isBotInited && !out.result.channel.channel_is_live) {
+          socket.isBotInited = false
+          socket.stop(12345, 'LIVE_CLOSED')
+          console.log('chat not inited to channel') //-
+        } else if (socket.isBotInited && out.result.channel.channel_is_live) {
+          console.log('chat worked')
+        } else {
+          console.log('chat not worked')
+        }
+        setTimeout(() => {
+          socket.initChat()
+        }, 10000)
+      },
+      error: function(err) {
+        console.log('err', err)
+        setTimeout(() => {
+          socket.initChat()
+        }, 10000)
       }
-      setTimeout(() => {
-        this.initChat()
-      }, 10000)
-    }) .catch((err) => {
-      setTimeout(() => {
-        this.initChat()
-      }, 10000)
-    })  
+    });
   },
   start() {
     let channel_name = new URL(document.URL).searchParams.get('channel_name')
     this.socketd = new WebSocket("wss://chat.wasd.tv/socket.io/?EIO=3&transport=websocket");
 
     this.socketd.onopen = function(e) {
-      fetch(`https://wasd.tv/api/auth/chat-token`)
-      .then(res => res.json())
-      .then((out) => {
-        socket.jwt = out.result
-        new Promise((resolve, reject) => {
-          socket.stream_url = `https://wasd.tv/api/v2/broadcasts/public?channel_name=${channel_name}`
-          fetch(`https://wasd.tv/api/v2/broadcasts/public?channel_name=${channel_name}`)
-          .then(res => res.json())
-          .then((out) => {
+      $.ajax({
+        url: `https://wasd.tv/api/auth/chat-token`,
+        headers: { 'Access-Control-Allow-Origin': 'https://wasd.tv' },
+        success: function(out) {
+          socket.jwt = out.result
+          new Promise((resolve, reject) => {
+            socket.stream_url = `https://wasd.tv/api/v2/broadcasts/public?channel_name=${channel_name}`
+            $.ajax({
+              url: `https://wasd.tv/api/v2/broadcasts/public?channel_name=${channel_name}`,
+              headers: { 'Access-Control-Allow-Origin': 'https://wasd.tv' },
+              success: function(out) {
 
-            socket.channelId = out.result.channel.channel_id
+                socket.channelId = out.result.channel.channel_id
 
-            fetch(`https://wasd.tv/api/v2/media-containers?limit=1&offset=0&media_container_status=RUNNING&channel_id=${out.result.channel.channel_id}`)
-            .then(res => res.json())
-            .then((out) => {
-              if (out.result[0] && out.result[0].media_container_streams[0]) {
-                resolve(out.result[0])
-              } else {
-                fetch('https://wasd.tv/api/v2/broadcasts/closed/'+new URL(document.URL).searchParams.get('private_link'))
-                .then(res => res.json())
-                .then((out) => {
-                  resolve(out.result)
-                })
+                $.ajax({
+                  url: `https://wasd.tv/api/v2/media-containers?limit=1&offset=0&media_container_status=RUNNING&channel_id=${out.result.channel.channel_id}`,
+                  headers: { 'Access-Control-Allow-Origin': 'https://wasd.tv' },
+                  success: function(out) {
+                    if (out.result[0] && out.result[0].media_container_streams[0]) {
+                      resolve(out.result[0])
+                    } else {
+                      
+                      $.ajax({
+                        url: `https://wasd.tv/api/v2/media-containers?limit=1&offset=0&media_container_status=RUNNING&channel_id=${out.result.channel.channel_id}`,
+                        headers: { 'Access-Control-Allow-Origin': 'https://wasd.tv' },
+                        success: function(out) {
+                          resolve(out.result)
+                        }
+                      });
+
+                    }
+                  }
+                });
+
               }
-            })
+            });
 
-          })
-        }).then((out) => {
-          if (out) {
-            if (typeof out.media_container == "undefined") {
-              socket.streamId = out.media_container_streams[0].stream_id
-            } else {
-              socket.streamId = out.media_container.media_container_streams[0].stream_id
+          }).then((out) => {
+            if (out) {
+              if (typeof out.media_container == "undefined") {
+                socket.streamId = out.media_container_streams[0].stream_id
+              } else {
+                socket.streamId = out.media_container.media_container_streams[0].stream_id
+              }
+
+              $.ajax({
+                url: `https://wasd.tv/api/chat/streams/${socket.streamId}/messages?limit=49&offset=0`,
+                headers: { 'Access-Control-Allow-Origin': 'https://wasd.tv' },
+                success: function(out) {
+                  for (let date of out.result.reverse()) {
+                    if (date.type == "MESSAGE") {
+                      socket.onMessage(['message', date.info, date.id])
+                    }
+                    if (date.type == "STICKER") {
+                      socket.onSticker(['sticker', date.info, date.id])
+                    }
+                  }
+
+                  var data = `42["join",{"streamId":${socket.streamId},"channelId":${socket.channelId},"jwt":"${socket.jwt}","excludeStickers":true}]`;
+                  socket.socketd.send(data);
+
+                  socket.intervalcheck = setInterval(() => {
+                    if (socket.socketd) {
+                      try {
+                        socket.socketd.send('2')
+                      } catch {
+                        clearInterval(socket.intervalcheck)
+                        socket.socketd = null
+                        console.log('[catch]', socket.socketd)
+                        socket.start()
+                      }
+                    }
+                  }, 5000)
+                }
+              });
+
             }
 
-            fetch(`https://wasd.tv/api/chat/streams/${socket.streamId}/messages?limit=49&offset=0`)
-            .then(res => res.json())
-            .then((out) => {
-
-              for (let date of out.result.reverse()) {
-                if (date.type == "MESSAGE") {
-                  socket.onMessage(['message', date.info, date.id])
-                }
-                if (date.type == "STICKER") {
-                  socket.onSticker(['sticker', date.info, date.id])
-                }
-              }
-
-              var data = `42["join",{"streamId":${socket.streamId},"channelId":${socket.channelId},"jwt":"${socket.jwt}","excludeStickers":true}]`;
-              socket.socketd.send(data);
-
-              socket.intervalcheck = setInterval(() => {
-                if (socket.socketd) {
-                  try {
-                    socket.socketd.send('2')
-                  } catch {
-                    clearInterval(socket.intervalcheck)
-                    socket.socketd = null
-                    console.log('[catch]', socket.socketd)
-                    socket.start()
-                  }
-                }
-              }, 5000)
-            })
-          }
-
-        })
-      })
+          })
+        }
+      });
     };
 
     this.socketd.onclose = function(e) {
