@@ -109,13 +109,13 @@ const socket = {
         }
         setTimeout(() => {
           socket.initChat()
-        }, 10000)
+        }, 30000)
       },
       error: function(err) {
         console.log('err', err)
         setTimeout(() => {
           socket.initChat()
-        }, 10000)
+        }, 30000)
       }
     });
   },
@@ -145,7 +145,7 @@ const socket = {
                     if (out.result[0] && out.result[0].media_container_streams[0]) {
                       resolve(out.result[0])
                     } else {
-                      
+
                       $.ajax({
                         url: `https://wasd.tv/api/v2/media-containers?limit=1&offset=0&media_container_status=RUNNING&channel_id=${out.result.channel.channel_id}`,
                         headers: { 'Access-Control-Allow-Origin': 'https://wasd.tv' },
