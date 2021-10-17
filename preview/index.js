@@ -120,7 +120,7 @@ var setting = {
 let spawner = {
   newMessage() {
     let data = list.users[spawner.randomNumber(1, 20)]
-    let message = list.message[spawner.randomNumber(1, 36)]
+    let message = list.message[spawner.randomNumber(1, 38)]
 
     message = HelperWASD.textToURL(message);
 
@@ -377,8 +377,10 @@ let list = {
     '32': 'упади',
     '33': 'бб',
     '34': 'кинь рейд мне',
-    '35': 'LUL LUL',
-    '36': 'Agakakskagesh Agakakskagesh Agakakskagesh Agakakskagesh Agakakskagesh Agakakskagesh Agakakskagesh Agakakskagesh'
+    '35': '<img _ngcontent-sjn-c51="" alt="sticker" class="sticker" src="https://st.wasd.tv/upload/stickers/c6933181-d4e5-4ea2-8c07-d3eda51cd8f3/original.png">',
+    '36': '<img _ngcontent-sjn-c51="" alt="sticker" class="sticker" src="https://st.wasd.tv/upload/stickers/e2fae7dd-214b-4293-ad25-0fb8c256280e/original.png">',
+    '37': '<img _ngcontent-sjn-c51="" alt="sticker" class="sticker" src="https://st.wasd.tv/upload/stickers/4376d926-0353-42ec-9985-1a5dac7f2704/original.png">',
+    '38': 'Agakakskagesh Agakakskagesh Agakakskagesh Agakakskagesh Agakakskagesh Agakakskagesh Agakakskagesh Agakakskagesh'
   },
   userid: {
     '@Gigadude': '62820',
