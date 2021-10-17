@@ -1,5 +1,7 @@
 const HelperWASD = {
-	usercolorapi(element) {
+  userColors: ["#7fba40", "#1c3fc8", "#a5276d", "#913ca7", "#4332b6", "#266bc5", "#5bc3c1", "#d87539", "#a9ad47", "#3ca13b", "#4db89a", "#6a4691", "#f5a623", "#e7719e", "#9fcbef", "#7b4b4b"],
+	badges: {},
+  usercolorapi(element) {
     // ищем цвет по api если по ласт сообщениям не нашли
     if (element.style.color == '' && settings.wasd.catm) {
       color = "rgba(var(--wasd-color-switch--rgb),.88);";
@@ -7,11 +9,10 @@ const HelperWASD = {
         url: `https://wasd.tv/api/search/profiles?limit=999&offset=0&search_phrase=${element.getAttribute('username').split('@').join('').toLowerCase().trim()}`,
         success: function(out) {
           let data;
-          const userColors = ["#7fba40", "#1c3fc8", "#a5276d", "#913ca7", "#4332b6", "#266bc5", "#5bc3c1", "#d87539", "#a9ad47", "#3ca13b", "#4db89a", "#6a4691", "#f5a623", "#e7719e", "#9fcbef", "#7b4b4b"];
           if (out.result) {
             for (let value of out.result.rows) {
               if (value.user_login.toLowerCase().trim() == element.getAttribute('username').split('@').join('').toLowerCase().trim()) {
-                color = userColors[value.user_id % (userColors.length - 1)];
+                color = HelperWASD.userColors[value.user_id % (HelperWASD.userColors.length - 1)];
                 break;
               }
             }
@@ -83,5 +84,16 @@ const HelperWASD = {
       }
       return text;
     }
+  },
+  loadBadges() {
+    $.ajax({
+      url: `https://raw.githubusercontent.com/ovgamesdev/BetterWASD.data/main/badges.json`,
+      success: function(out) {
+        HelperWASD.badges = JSON.parse(out)
+      },
+      error: function() {
+        HelperWASD.badges = {}
+      }
+    });
   },
 }

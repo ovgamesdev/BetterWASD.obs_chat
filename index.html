@@ -63,6 +63,8 @@
 
     async function load() {
 
+      HelperWASD.loadBadges()
+
       await HelperBTTV.update();
       let bttv = settings.wasd.bttv
       if (bttv != '') await HelperBTTV.loadEmotesUsers(bttv)

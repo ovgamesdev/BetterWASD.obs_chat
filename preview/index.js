@@ -121,8 +121,6 @@ let spawner = {
   newMessage() {
     let data = list.users[spawner.randomNumber(1, 20)]
     let message = list.message[spawner.randomNumber(1, 36)]
-    const userColors = ["#7fba40", "#1c3fc8", "#a5276d", "#913ca7", "#4332b6", "#266bc5", "#5bc3c1", "#d87539", "#a9ad47", "#3ca13b", "#4db89a", "#6a4691", "#f5a623", "#e7719e", "#9fcbef", "#7b4b4b"];
-
 
     message = HelperWASD.textToURL(message);
 
@@ -142,10 +140,11 @@ let spawner = {
     div.setAttribute('role', data['role'])
     div.classList.add('block__messages__item')
 
-    let isOwner = data['role'].indexOf('owner')     != -1
-    let isMod   = data['role'].indexOf('moderator') != -1
-    let isSub   = data['role'].indexOf('sub')       != -1
-    let isAdmin = data['role'].indexOf('admin')     != -1
+    let isOwner  = data['role'].indexOf('owner')     != -1
+    let isMod    = data['role'].indexOf('moderator') != -1
+    let isSub    = data['role'].indexOf('sub')       != -1
+    let isAdmin  = data['role'].indexOf('admin')     != -1
+    let isModDev = data['role'].indexOf('modDEV')    != -1
 
     if (typeof settings.wasd.sbo == 'undefined') settings.wasd.sbo = true
     if (typeof settings.wasd.sbm == 'undefined') settings.wasd.sbm = true
@@ -174,8 +173,9 @@ let spawner = {
         <div _ngcontent-uer-c51="" class="message__info">
           <div _ngcontent-uer-c51="" class="message__info__text">
             <div _ngcontent-uer-c51="" class="info__text__status">
-              ${isSub ? `<div _ngcontent-uer-c51="" class="info__text__status-paid" style="background-color: ${userColors[data['userid'] % (userColors.length - 1)]};"><i _ngcontent-uer-c51="" class="icon wasd-icons-star"></i></div>` : ``}
-              <div _ngcontent-uer-c51="" username="${data['username']}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${userColors[data['userid'] % (userColors.length - 1)]}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${data['username']}</div>
+              ${isModDev ? `<div ovg="" class="info__text__status-dev" style="background-color: ${HelperWASD.userColors[data['userid'] % (HelperWASD.userColors.length - 1)]};"><i badge="" class="icon wasd-icons-dev"></i></div>` : ``}
+              ${isSub ? `<div _ngcontent-uer-c51="" class="info__text__status-paid" style="background-color: ${HelperWASD.userColors[data['userid'] % (HelperWASD.userColors.length - 1)]};"><i _ngcontent-uer-c51="" class="icon wasd-icons-star"></i></div>` : ``}
+              <div _ngcontent-uer-c51="" username="${data['username']}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${HelperWASD.userColors[data['userid'] % (HelperWASD.userColors.length - 1)]}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${data['username']}</div>
             </div>
 
             <div _ngcontent-uer-c51="" class="message-text"><span _ngcontent-uer-c51=""> ${message} </span>
@@ -205,8 +205,7 @@ let spawner = {
     let bl = ''
     if (messageText) {
       messageText.innerHTML = messageText.innerHTML.replace(/@[a-zA-Z0-9_-]+/ig, function($1) {
-        let userColors = ["#7fba40", "#1c3fc8", "#a5276d", "#913ca7", "#4332b6", "#266bc5", "#5bc3c1", "#d87539", "#a9ad47", "#3ca13b", "#4db89a", "#6a4691", "#f5a623", "#e7719e", "#9fcbef", "#7b4b4b"];
-        return `<span style='color: ${userColors[list.userid[$1.trim()] % (userColors.length - 1)]};' class='chat-message-mention' username="${$1.toLowerCase()}">@${$1.trim().split('@').join('').trim()}</span>`;
+        return `<span style='color: ${HelperWASD.userColors[list.userid[$1.trim()] % (HelperWASD.userColors.length - 1)]};' class='chat-message-mention' username="${$1.toLowerCase()}">@${$1.trim().split('@').join('').trim()}</span>`;
       });
 
       div.querySelectorAll('.chat-message-mention').forEach(element => {
@@ -223,7 +222,7 @@ let list = {
     '1': {
       'icon': '5',
       'userid': '94252',
-      'role': 'user owner',
+      'role': 'user owner modDEV',
       'username': 'Raspin',
     },
     '2': {

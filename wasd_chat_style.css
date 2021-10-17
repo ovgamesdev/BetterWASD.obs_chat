@@ -345,3 +345,26 @@ span.chat-message-text.stickertext {
     content: '[сообщение удалено]';
     color: rgba(var(--color-switch), .4)!important
 }
+
+/* badges */
+.info__text__status-dev[ovg] {
+  border-radius: 2px;
+  margin-right: 4px;
+  padding: 0 4px;
+
+  color: rgba(var(--wasd-color-switch--rgb),.88);
+  font-size: 14px;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.icon[badge] {
+  color: var(--wasd-color-white);
+  display: inline-block;
+  font-size: 14px;
+}
+.icon[badge]:before {
+  margin-left: 0;
+  margin-right: 0;
+  transform: rotate(180deg) translateX(-0.5px);
+}

@@ -479,6 +479,11 @@ const socket = {
       div.style.display = 'block';
     }
 
+    let badge = HelperWASD.badges[div.getAttribute('username')]
+    if (badge && badge.user_role == 'DEV') {
+      div.querySelector('.info__text__status').insertAdjacentHTML("afterbegin", `<div ovg="" class="info__text__status-dev" style="background-color: ${HelperWASD.userColors[badge.user_id % (HelperWASD.userColors.length - 1)]};"><i badge="" class="icon wasd-icons-dev"></i></div>`) 
+    }
+
   },
   onSticker(JSData, isNew=false) {
     // console.log(JSData[1].user_login+':', JSData[1].message)
@@ -569,6 +574,12 @@ const socket = {
     } else {
       div.style.display = 'block';
     }
+
+    let badge = HelperWASD.badges[div.getAttribute('username')]
+    if (badge && badge.user_role == 'DEV') {
+      div.querySelector('.info__text__status').insertAdjacentHTML("afterbegin", `<div ovg="" class="info__text__status-dev" style="background-color: ${HelperWASD.userColors[badge.user_id % (HelperWASD.userColors.length - 1)]};"><i badge="" class="icon wasd-icons-dev"></i></div>`) 
+    }
+
   },
   systemMessage(text) {
     let message = document.createElement('div')
@@ -591,8 +602,7 @@ const socket = {
 
 const parser = {
   color(JSData) {
-    const userColors = ["#7fba40", "#1c3fc8", "#a5276d", "#913ca7", "#4332b6", "#266bc5", "#5bc3c1", "#d87539", "#a9ad47", "#3ca13b", "#4db89a", "#6a4691", "#f5a623", "#e7719e", "#9fcbef", "#7b4b4b"];
-    return userColors[JSData[1].user_id % (userColors.length - 1)]
+    return HelperWASD.userColors[JSData[1].user_id % (HelperWASD.userColors.length - 1)]
   },
   avatar(JSData) {
     return JSData[1].user_avatar.small
