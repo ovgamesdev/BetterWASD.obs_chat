@@ -2,7 +2,6 @@ const HelperBTTV = {
 	items: {},
   isBusy: false,
   emotes: {},
-  fullemotes: {},
   async loadEmotesUsers(users) {
   	let u = users.split(';')
   	let index = 0
@@ -67,7 +66,6 @@ const HelperBTTV = {
 	          }
 	        }
 	      }
-	      HelperBTTV.fullemotes = items
 	      HelperBTTV.emotes = emotes;
 	      resolve();
 	    });
@@ -147,7 +145,10 @@ const HelperBTTV = {
   },
   tryAddUser(username) {
   	return new Promise((resolve) => {
-	    if (!username.length) return;
+	    if (!username.length) {
+        resolve()
+        return;
+      }
 	    // if (HelperBTTV.isBusy) return;
 	    HelperBTTV.isBusy = true;
 	    let beforeEmotes = Object.keys(HelperBTTV.emotes).length;
@@ -159,7 +160,7 @@ const HelperBTTV = {
 	        if (typeof bttvUsers[userID] !== 'undefined') return Promise.reject('Пользователь уже в списке');
 	        return HelperBTTV.updateUserChannelEmotes(userID, data[0].display_name);
 	      } else {
-	        return Promise.reject('Пользователь Twitch не найден');
+	        return Promise.reject(`Пользователь Twitch не найден: ${username}`);
 	      }
 	    }).then(() => {
 	      return HelperBTTV.update();
@@ -167,7 +168,7 @@ const HelperBTTV = {
 	      let newEmotes = Object.keys(HelperBTTV.emotes).length - beforeEmotes;
 	      console.log(`Пользователь ${username} и ${newEmotes} уникальные эмоции добавлены.`);
 	    }).catch((err) => {
-	      console.log(err, 'error');
+	      console.log(err);
 	    }).finally(() => {
 	      HelperBTTV.isBusy = false;
 	      resolve()

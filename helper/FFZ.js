@@ -2,7 +2,6 @@ const HelperFFZ = {
 	items: {},
   isBusy: false,
   emotes: {},
-
   async loadEmotesUsers(users) {
   	let u = users.split(';')
   	let index = 0
@@ -67,7 +66,6 @@ const HelperFFZ = {
             }
           }
         }
-
         HelperFFZ.emotes = emotes;
         resolve();
       });
@@ -147,7 +145,10 @@ const HelperFFZ = {
   },
   tryAddUser(username) {
   	return new Promise((resolve) => {
-	    if (!username.length) return;
+	    if (!username.length) {
+        resolve()
+        return;
+      }
 	    // if (HelperFFZ.isBusy) return;
 	    HelperFFZ.isBusy = true;
 	    let beforeEmotes = Object.keys(HelperFFZ.emotes).length;
@@ -159,7 +160,7 @@ const HelperFFZ = {
 	        if (typeof ffzUsers[userID] !== 'undefined') return Promise.reject('Пользователь уже в списке');
 	        return HelperFFZ.updateUserChannelEmotes(userID, data[0].display_name);
 	      } else {
-	        return Promise.reject('Пользователь Twitch не найден');
+	        return Promise.reject(`Пользователь Twitch не найден: ${username}`);
 	      }
 	    }).then(() => {
 	      return HelperFFZ.update();
@@ -167,7 +168,7 @@ const HelperFFZ = {
 	      let newEmotes = Object.keys(HelperFFZ.emotes).length - beforeEmotes;
 	      console.log(`Пользователь ${username} и ${newEmotes} уникальные эмоции добавлены.`);
 	    }).catch((err) => {
-	      console.log(err, 'error');
+	      console.log(err);
 	    }).finally(() => {
 	      HelperFFZ.isBusy = false;
 	      resolve()

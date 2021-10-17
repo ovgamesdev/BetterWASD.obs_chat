@@ -2,7 +2,6 @@ const HelperTV7 = {
 	items: {},
   isBusy: false,
   emotes: {},
-
   async loadEmotesUsers(users) {
   	let u = users.split(';')
   	let index = 0
@@ -67,7 +66,6 @@ const HelperTV7 = {
             }
           }
         }
-
         HelperTV7.emotes = emotes;
         resolve();
       });
@@ -147,7 +145,10 @@ const HelperTV7 = {
   },
   tryAddUser(username) {
     return new Promise((resolve) => {
-	    if (!username.length) return;
+	    if (!username.length) {
+        resolve()
+        return;
+      }
 	    // if (HelperTV7.isBusy) return;
 	    HelperTV7.isBusy = true;
 	    let beforeEmotes = Object.keys(HelperTV7.emotes).length;
@@ -159,7 +160,7 @@ const HelperTV7 = {
 	        if (typeof tv7Users[userID] !== 'undefined') return Promise.reject('Пользователь уже в списке');
 	        return HelperTV7.updateUserChannelEmotes(userID, data[0].display_name);
 	      } else {
-	        return Promise.reject('Пользователь Twitch не найден');
+	        return Promise.reject(`Пользователь Twitch не найден: ${username}`);
 	      }
 	    }).then(() => {
 	      return HelperTV7.update();
@@ -167,7 +168,7 @@ const HelperTV7 = {
 	      let newEmotes = Object.keys(HelperTV7.emotes).length - beforeEmotes;
 	      console.log(`Пользователь ${username} и ${newEmotes} уникальные эмоции добавлены.`);
 	    }).catch((err) => {
-	      console.log(err, 'error');
+	      console.log(err);
 	    }).finally(() => {
 	      HelperTV7.isBusy = false;
 	      resolve()
