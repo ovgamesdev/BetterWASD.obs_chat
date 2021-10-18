@@ -95,6 +95,8 @@ const socket = {
       url: `https://wasd.tv/api/v2/broadcasts/public?channel_name=${new URL(document.URL).searchParams.get('channel_name')}`,
       headers: { 'Access-Control-Allow-Origin': 'https://wasd.tv' },
       success: function(out) {
+        socket.current = out.result
+
         if (!socket.isBotInited && out.result.channel.channel_is_live) {
           socket.isBotInited = true
           socket.start()
@@ -188,20 +190,23 @@ const socket = {
 
                   loader.updateStatus('Подключение к WebSocket') // log
                   var data = `42["join",{"streamId":${socket.streamId},"channelId":${socket.channelId},"jwt":"${socket.jwt}","excludeStickers":true}]`;
-                  socket.socketd.send(data);
-
+                  try {
+                    socket.socketd.send(data);
+                  } catch {
+                    console.log('[catch]', err)
+                  }
                   socket.intervalcheck = setInterval(() => {
                     if (socket.socketd) {
                       try {
                         socket.socketd.send('2')
-                      } catch {
+                      } catch (err) {
                         clearInterval(socket.intervalcheck)
                         socket.socketd = null
-                        console.log('[catch]', socket.socketd)
-                        socket.start()
+                        console.log('[catch]', err)
+                        setTimeout(() => { socket.start() }, 10000)
                       }
                     }
-                  }, 5000)
+                  }, 2000)
                 }
               });
 
@@ -218,12 +223,14 @@ const socket = {
       socket.isBotInited = false
       if (e.code == 404) {
         console.log(`[close] Соединение закрыто чисто, код= ${e.code} причина= ${e.reason}`);
+        loader.updateStatus('Соединение закрыто', "код= " + e.code)
       } else if (e.wasClean) {
         console.log(`[close] Соединение закрыто чисто, код= ${e.code} причина= ${e.reason}`);
         socket.systemMessage('Соединение закрыто')
       } else {
-        console.log('[close] Соединение прервано');
-        socket.start()
+        console.log('[close] Соединение прервано', "код= " + e.code);
+        loader.updateStatus('Соединение прервано', "код= " + e.code) // log
+        setTimeout(() => { socket.start() }, 10000)
       }
     };
 
@@ -368,6 +375,7 @@ const socket = {
       clearInterval(socket.intervalcheck)
       socket.socketd = null
       console.log(`[error]`, error);
+      loader.updateStatus('Соединение прервано', 'error') // log
       //socket.start()
     };
   },
@@ -396,6 +404,7 @@ const socket = {
       message_text = stripCombiningMarks(message_text)
     }
 
+
     message_text = HelperBTTV.replaceText(message_text)
     message_text = HelperFFZ.replaceText(message_text)
     message_text = HelperTV7.replaceText(message_text)
@@ -406,6 +415,10 @@ const socket = {
     div.setAttribute('username', JSData[1].user_login)
     div.setAttribute('message', JSData[1].message)
     div.setAttribute('user_id', JSData[1].user_id)
+   
+    if (message_text.indexOf(socket.current.channel.channel_owner.user_login) != -1) {
+      // div.querySelector('.message').classList.add('has-mention')
+    }
 
     if (JSData[2]) div.setAttribute('message_id', JSData[2])
     if (JSData[1].id) div.setAttribute('message_id', JSData[1].id)
