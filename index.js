@@ -87,7 +87,7 @@ const socket = {
   intervalcheck: null,
   current: null,
   stream_url: null,
-  isBotInited: false,
+  isLiveInited: false,
   intervals: [],
   initChat() {
     loader.updateStatus('Получаем данные пользователя', new URL(document.URL).searchParams.get('channel_name')) // log
@@ -97,15 +97,15 @@ const socket = {
       success: function(out) {
         socket.current = out.result
 
-        if (!socket.isBotInited && out.result.channel.channel_is_live) {
-          socket.isBotInited = true
+        if (!socket.isLiveInited && out.result.channel.channel_is_live) {
+          socket.isLiveInited = true
           socket.start()
           console.log('chat inited to channel')
-        } else if (socket.isBotInited && !out.result.channel.channel_is_live) {
-          socket.isBotInited = false
-          socket.stop(12345, 'LIVE_CLOSED')
+        } else if (socket.isLiveInited && !out.result.channel.channel_is_live) {
+          socket.isLiveInited = false
+          socket.stop(1000, 'LIVE_CLOSED')
           console.log('chat not inited to channel') //-
-        } else if (socket.isBotInited && out.result.channel.channel_is_live) {
+        } else if (socket.isLiveInited && out.result.channel.channel_is_live) {
           console.log('chat worked')
         } else {
           console.log('chat not worked')
@@ -192,7 +192,7 @@ const socket = {
                   var data = `42["join",{"streamId":${socket.streamId},"channelId":${socket.channelId},"jwt":"${socket.jwt}","excludeStickers":true}]`;
                   try {
                     socket.socketd.send(data);
-                  } catch {
+                  } catch (err) {
                     console.log('[catch]', err)
                   }
                   socket.intervalcheck = setInterval(() => {
@@ -203,7 +203,7 @@ const socket = {
                         clearInterval(socket.intervalcheck)
                         socket.socketd = null
                         console.log('[catch]', err)
-                        setTimeout(() => { socket.start() }, 10000)
+                        // setTimeout(() => { socket.start() }, 10000)
                       }
                     }
                   }, 2000)
@@ -220,7 +220,8 @@ const socket = {
     this.socketd.onclose = function(e) {
       clearInterval(socket.intervalcheck)
       socket.socketd = null
-      socket.isBotInited = false
+      socket.isLiveInited = false
+      setTimeout(() => { socket.start() }, 10000)
       if (e.code == 404) {
         console.log(`[close] Соединение закрыто чисто, код= ${e.code} причина= ${e.reason}`);
         loader.updateStatus('Соединение закрыто', "код= " + e.code)
@@ -230,7 +231,6 @@ const socket = {
       } else {
         console.log('[close] Соединение прервано', "код= " + e.code);
         loader.updateStatus('Соединение прервано', "код= " + e.code) // log
-        setTimeout(() => { socket.start() }, 10000)
       }
     };
 
