@@ -415,10 +415,6 @@ const socket = {
     div.setAttribute('username', JSData[1].user_login)
     div.setAttribute('message', JSData[1].message)
     div.setAttribute('user_id', JSData[1].user_id)
-   
-    if (message_text.indexOf(socket.current.channel.channel_owner.user_login) != -1) {
-      // div.querySelector('.message').classList.add('has-mention')
-    }
 
     if (JSData[2]) div.setAttribute('message_id', JSData[2])
     if (JSData[1].id) div.setAttribute('message_id', JSData[1].id)
@@ -475,10 +471,14 @@ const socket = {
         </div>
       </div>
     </wasd-chat-message>`
-
     messages_div.append(div)
-    document.querySelector('.block').scrollTop = document.querySelector('.block').scrollHeight
 
+    if (!settings.wasd.mention) settings.wasd.mention = true
+    if (settings.wasd.mention && message_text.indexOf(socket.current.channel.channel_owner.user_login) != -1) {
+      div.querySelector('.message').classList.add('has-mention')
+    }
+
+    document.querySelector('.block').scrollTop = document.querySelector('.block').scrollHeight
     var messageText = div.querySelector('.message-text > span')
 
     div.setAttribute('mention', HelperWASD.get_user_color(messageText, div))
