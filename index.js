@@ -96,6 +96,15 @@ const socket = {
       headers: { 'Access-Control-Allow-Origin': 'https://wasd.tv' },
       success: function(out) {
         socket.current = out.result
+        if (!document.querySelector('.hidden.info__text__status__name')) {
+          let dd = document.createElement('div')
+          dd.classList.add('info__text__status__name')
+          dd.classList.add('hidden')
+          dd.setAttribute('username', '@' + socket.current.channel.channel_owner.user_login.toLowerCase())
+          dd.style.color = HelperWASD.userColors[socket.current.channel.channel_owner.user_id % (HelperWASD.userColors.length - 1)]
+          dd.style.display = 'none'
+          document.body.append(dd)
+        }
 
         if (!socket.isLiveInited && out.result.channel.channel_is_live) {
           socket.isLiveInited = true
@@ -109,6 +118,7 @@ const socket = {
           console.log('chat worked')
         } else {
           console.log('chat not worked')
+          loader.updateStatus('Ожидаем начало стрима', socket.current.channel.channel_owner.user_login) // log
         }
         setTimeout(() => {
           socket.initChat()
@@ -221,7 +231,7 @@ const socket = {
       clearInterval(socket.intervalcheck)
       socket.socketd = null
       socket.isLiveInited = false
-      setTimeout(() => { socket.start() }, 10000)
+      // setTimeout(() => { socket.start() }, 10000)
       if (e.code == 404) {
         console.log(`[close] Соединение закрыто чисто, код= ${e.code} причина= ${e.reason}`);
         loader.updateStatus('Соединение закрыто', "код= " + e.code)
@@ -286,18 +296,13 @@ const socket = {
                 `<div _ngcontent-vpf-c53="" class="block__messages__item" role="user" style="display: block;">
                   <wasd-chat-follower-message _ngcontent-vpf-c53="" _nghost-vpf-c74="">
                     <div _ngcontent-uer-c64="" class="message-follower">
-                      <div _ngcontent-uer-c64="" class="message-follower__name" username="${JSData[1].payload.user_login}">@${JSData[1].payload.user_login}</div>
+                      <div _ngcontent-uer-c64="" class="message-follower__name chat-message-mention" style="${settings.wasd.cma ? `color: ${HelperWASD.userColors[JSData[1].payload.user_id % (HelperWASD.userColors.length - 1)]};` : ``}" username="${JSData[1].payload.user_login}">${JSData[1].payload.user_login}</div>
                       <div _ngcontent-uer-c64="" class="message-follower__text"><span _ngcontent-uer-c64="">Добавляет канал в избранное</span></div>
                     </div>
                   </wasd-chat-follower-message>
                 </div>`
                 messages_div.append(div)
                 document.querySelector('.block').scrollTop = document.querySelector('.block').scrollHeight
-
-                var messageText = div.querySelector('.message-follower__name')
-                if (settings.wasd.cma) HelperWASD.get_user_color(messageText, div)
-                div.querySelector('.chat-message-mention').textContent = div.querySelector('.chat-message-mention').textContent.split('@').join('')
-
               }
               break;
             case "giftsV1":
@@ -332,6 +337,21 @@ const socket = {
               //     text.replace('{product_name}', prname);
               //     socket.send(text)
               // }
+
+                let div = document.createElement('div')
+                div.setAttribute('_ngcontent-uer-c53', '')
+                div.classList.add('block__messages__item')
+                div.innerHTML = 
+                `<div _ngcontent-vpf-c53="" class="block__messages__item" role="user" style="display: block;">
+                  <wasd-chat-follower-message _ngcontent-vpf-c53="" _nghost-vpf-c74="">
+                    <div _ngcontent-uer-c64="" class="message-follower">
+                      <div _ngcontent-uer-c64="" class="message-follower__name chat-message-mention" style="${settings.wasd.cma ? `color: ${HelperWASD.userColors[JSData[1].user_id % (HelperWASD.userColors.length - 1)]};` : ``}" username="${JSData[1].user_login}">${JSData[1].user_login}</div>
+                      <div _ngcontent-uer-c64="" class="message-follower__text"><span _ngcontent-uer-c64="">Подписался на ${JSData[1].product_name}</span></div>
+                    </div>
+                  </wasd-chat-follower-message>
+                </div>`
+                messages_div.append(div)
+                document.querySelector('.block').scrollTop = document.querySelector('.block').scrollHeight
                 break;
             case "_system":
               console.log(`[${JSData[0]}] ${JSData[1]}`, JSData);
@@ -381,8 +401,11 @@ const socket = {
   },
   stop(code, reason) {
     clearInterval(socket.intervalcheck)
-    this.socketd.close(code, reason)
     this.socketd = null
+    this.streamId = 0
+    this.channelId = 0
+    this.current = null
+    this.stream_url = null
   },
   hash(length) {
     var result = '';
@@ -460,7 +483,7 @@ const socket = {
           <div _ngcontent-uer-c51="" class="message__info__text">
             <div _ngcontent-uer-c51="" class="info__text__status">
               ${isSub ? `<div _ngcontent-uer-c51="" class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i _ngcontent-uer-c51="" class="icon wasd-icons-star"></i></div>` : ``}
-              <div _ngcontent-uer-c51="" username="${JSData[1].user_login.toLowerCase()}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>
+              <div _ngcontent-uer-c51="" username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>
             </div>
 
             <div _ngcontent-uer-c51="" class="message-text"><span _ngcontent-uer-c51=""> ${message_text} </span>
@@ -558,7 +581,7 @@ const socket = {
           <div _ngcontent-uer-c51="" class="message__info__text">
             <div _ngcontent-uer-c51="" class="info__text__status">
               ${isSub ? `<div _ngcontent-uer-c51="" class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i _ngcontent-uer-c51="" class="icon wasd-icons-star"></i></div>` : ``}
-              <div _ngcontent-uer-c51="" username="${JSData[1].user_login.toLowerCase()}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>
+              <div _ngcontent-uer-c51="" username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>
             </div>
 
             <div _ngcontent-uer-c51="" class="message-text"><span _ngcontent-uer-c51=""> </span>
@@ -677,7 +700,21 @@ const loader = {
 
   },
   updateStatus(title='', description='') {
-    if (loader.div) loader.div.querySelector('.block__item__text').textContent = `${title} ${description ? `(${description})` : ''}`
+    if (document.querySelector('#loader_div')) {
+      loader.div.querySelector('.block__item__text').textContent = `${title} ${description ? `(${description})` : ''}`
+    } else {
+      loader.div = document.createElement('div')
+      loader.div.id = 'loader_div'
+      loader.div.setAttribute('_ngcontent-uer-c53', '')
+      loader.div.innerHTML = `<wasd-chat-system-message _ngcontent-uer-c53="" _nghost-uer-c64="">
+        <div _ngcontent-uer-c64="" class="block">
+          <div _ngcontent-uer-c64="" class="block__item">
+            <div _ngcontent-uer-c64="" class="block__item__text"> ${title} ${description ? '(' + description + ')' : `` } </div>
+          </div>
+        </div>
+      </wasd-chat-system-message>`
+      messages_div.append(loader.div)
+    }
   },
   end() {
     if (loader.div) setTimeout(() => {

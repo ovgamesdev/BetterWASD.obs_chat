@@ -4,7 +4,7 @@ const HelperWASD = {
   usercolorapi(element) {
     // ищем цвет по api если по ласт сообщениям не нашли
     if (element.style.color == '' && settings.wasd.catm) {
-      color = "rgba(var(--wasd-color-switch--rgb),.88);";
+      let color = "";
       $.ajax({
         url: `https://wasd.tv/api/search/profiles?limit=999&offset=0&search_phrase=${element.getAttribute('username').split('@').join('').toLowerCase().trim()}`,
         success: function(out) {
@@ -27,7 +27,7 @@ const HelperWASD = {
     let color = ''
     if (settings.wasd.catm) {
       let u = document.querySelector(`.info__text__status__name[username="${channel_name.trim().toLowerCase().split('@').join('')}"]`)
-      if (u) color = u.style.color;
+      if (u) color = u.getAttribute('u_color')
       if (color != '') {
         let m = document.querySelector(`.chat-message-mention[username="${channel_name.trim().toLowerCase()}"]`)
         if (m) color = m.style.color;
