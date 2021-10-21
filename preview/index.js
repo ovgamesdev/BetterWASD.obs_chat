@@ -128,9 +128,9 @@ let spawner = {
       message = stripCombiningMarks(message)
     }
 
+    message = HelperTV7.replaceText(message)
     message = HelperBTTV.replaceText(message)
     message = HelperFFZ.replaceText(message)
-    message = HelperTV7.replaceText(message)
 
 
     let div = document.createElement('div')

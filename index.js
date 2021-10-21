@@ -435,9 +435,9 @@ const socket = {
     }
 
 
+    message_text = HelperTV7.replaceText(message_text)
     message_text = HelperBTTV.replaceText(message_text)
     message_text = HelperFFZ.replaceText(message_text)
-    message_text = HelperTV7.replaceText(message_text)
 
 
     let div = document.createElement('div')
