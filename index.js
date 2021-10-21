@@ -158,15 +158,20 @@ const socket = {
                   url: `https://wasd.tv/api/v2/media-containers?limit=1&offset=0&media_container_status=RUNNING&channel_id=${out.result.channel.channel_id}`,
                   headers: { 'Access-Control-Allow-Origin': 'https://wasd.tv' },
                   success: function(out) {
+                    // console.log(out)
                     if (out.result[0] && out.result[0].media_container_streams[0]) {
                       resolve(out.result[0])
+                      // console.log(out.result[0])
                     } else {
 
                       $.ajax({
-                        url: `https://wasd.tv/api/v2/media-containers?limit=1&offset=0&media_container_status=RUNNING&channel_id=${out.result.channel.channel_id}`,
+                        url: `https://wasd.tv/api/v2/broadcasts/closed/${new URL(document.URL).searchParams.get('private_link')}`,
                         headers: { 'Access-Control-Allow-Origin': 'https://wasd.tv' },
                         success: function(out) {
-                          resolve(out.result)
+                          if (out.result.media_container != null) {
+                            resolve(out.result)
+                            // console.log(out.result)
+                          }
                         }
                       });
 
@@ -179,6 +184,7 @@ const socket = {
 
           }).then((out) => {
             if (out) {
+              // console.log(out)
               if (typeof out.media_container == "undefined") {
                 socket.streamId = out.media_container_streams[0].stream_id
               } else {
@@ -189,6 +195,7 @@ const socket = {
                 url: `https://wasd.tv/api/chat/streams/${socket.streamId}/messages?limit=49&offset=0`,
                 headers: { 'Access-Control-Allow-Origin': 'https://wasd.tv' },
                 success: function(out) {
+                  loader.end()
                   for (let date of out.result.reverse()) {
                     if (date.type == "MESSAGE") {
                       socket.onMessage(['message', date.info, date.id])
@@ -234,13 +241,13 @@ const socket = {
       // setTimeout(() => { socket.start() }, 10000)
       if (e.code == 404) {
         console.log(`[close] Соединение закрыто чисто, код= ${e.code} причина= ${e.reason}`);
-        loader.updateStatus('Соединение закрыто', "код= " + e.code)
+        loader.updateStatus('Соединение закрыто', "код= " + e.code, true)
       } else if (e.wasClean) {
         console.log(`[close] Соединение закрыто чисто, код= ${e.code} причина= ${e.reason}`);
         socket.systemMessage('Соединение закрыто')
       } else {
         console.log('[close] Соединение прервано', "код= " + e.code);
-        loader.updateStatus('Соединение прервано', "код= " + e.code) // log
+        loader.updateStatus('Соединение прервано', "код= " + e.code, true) // log
       }
     };
 
@@ -395,7 +402,7 @@ const socket = {
       clearInterval(socket.intervalcheck)
       socket.socketd = null
       console.log(`[error]`, error);
-      loader.updateStatus('Соединение прервано', 'error') // log
+      loader.updateStatus('Соединение прервано', 'error', true) // log
       //socket.start()
     };
   },
@@ -627,16 +634,13 @@ const socket = {
     let message = document.createElement('div')
     message.setAttribute('_ngcontent-uer-c53', '')
     message.classList.add('block__messages__item')
-    message.innerHTML = 
-    `<div _ngcontent-uer-c53="" class="block__messages__item">
-      <wasd-chat-system-message _ngcontent-uer-c53="" _nghost-uer-c64="">
+    message.innerHTML = `<wasd-chat-system-message _ngcontent-uer-c53="" _nghost-uer-c64="">
         <div _ngcontent-uer-c64="" class="block">
           <div _ngcontent-uer-c64="" class="block__item">
             <div _ngcontent-uer-c64="" class="block__item__text"> ${text} </div>
           </div>
         </div>
-      </wasd-chat-system-message>
-    </div>`
+      </wasd-chat-system-message>`
     messages_div.append(message)
     document.querySelector('.block').scrollTop = document.querySelector('.block').scrollHeight
   }
@@ -699,10 +703,10 @@ const loader = {
   create() {
 
   },
-  updateStatus(title='', description='') {
+  updateStatus(title='', description='', top=false) {
     if (document.querySelector('#loader_div')) {
       loader.div.querySelector('.block__item__text').textContent = `${title} ${description ? `(${description})` : ''}`
-    } else {
+    } else if (top) {
       loader.div = document.createElement('div')
       loader.div.id = 'loader_div'
       loader.div.setAttribute('_ngcontent-uer-c53', '')
@@ -714,12 +718,13 @@ const loader = {
         </div>
       </wasd-chat-system-message>`
       messages_div.append(loader.div)
+      document.querySelector('.block').scrollTop = document.querySelector('.block').scrollHeight
     }
   },
   end() {
-    if (loader.div) setTimeout(() => {
-      loader.div.style['animation']         = 'animation: fadeOut 0.5s ease 30000ms forwards;'
-      loader.div.style['-webkit-animation'] = 'animation: fadeOut 0.5s ease 30000ms forwards;'
-    }, 1500)
+    if (loader.div) {
+      loader.div.style['animation'] = `fadeOut 0.5s ease ${settings.wasd.nma.toString()}ms forwards`
+      loader.div.style['-webkit-animation'] = `fadeOut 0.5s ease ${settings.wasd.nma.toString()}ms forwards`
+    }
   }
 }

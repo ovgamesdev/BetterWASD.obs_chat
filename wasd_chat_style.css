@@ -372,3 +372,9 @@ span.chat-message-text.stickertext {
   height: 100%;
   justify-content: flex-end;
 }
+
+/* msg  */
+.block__messages__item,
+#loader_div {
+    display: flex;
+}
