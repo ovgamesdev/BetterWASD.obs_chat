@@ -294,20 +294,25 @@ const socket = {
               break;
             case "event":
               console.log(`[${JSData[0]}] ${JSData[1].event_type} - ${JSData[1].payload.user_login} ${JSData[1].message}`, JSData);
-              if (JSData[1].event_type == 'NEW_FOLLOWER') {
+              if (JSData[1].event_type == 'NEW_FOLLOWER' && !document.querySelector(`NEW_FOLLOWER.history [user_login="${JSData[1].payload.user_login}"]`)) {
                   
                 let div = document.createElement('div')
                 div.setAttribute('_ngcontent-uer-c53', '')
                 div.classList.add('block__messages__item')
                 div.innerHTML = 
-                `<div _ngcontent-vpf-c53="" class="block__messages__item" role="user" style="display: block;">
-                  <wasd-chat-follower-message _ngcontent-vpf-c53="" _nghost-vpf-c74="">
+                `<div _ngcontent-vpf-c53="" class="block__messages__item" role="follow" style="display: contents;">
+                  <wasd-chat-follower-message _ngcontent-vpf-c53="" _nghost-vpf-c74="" style="margin-right: 36px;">
                     <div _ngcontent-uer-c64="" class="message-follower">
                       <div _ngcontent-uer-c64="" class="message-follower__name chat-message-mention" style="${settings.wasd.cma ? `color: ${HelperWASD.userColors[JSData[1].payload.user_id % (HelperWASD.userColors.length - 1)]};` : ``}" username="${JSData[1].payload.user_login}">${JSData[1].payload.user_login}</div>
                       <div _ngcontent-uer-c64="" class="message-follower__text"><span _ngcontent-uer-c64="">Добавляет канал в избранное</span></div>
                     </div>
                   </wasd-chat-follower-message>
                 </div>`
+
+                let user = document.createElement('div')
+                user.setAttribute('user_login', JSData[1].payload.user_login)
+                document.querySelector(`NEW_FOLLOWER.history`).append(user)
+                
                 messages_div.append(div)
                 document.querySelector('.block').scrollTop = document.querySelector('.block').scrollHeight
               }
