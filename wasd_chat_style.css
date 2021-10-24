@@ -58,10 +58,6 @@
     padding: 2px 12px
 }
 
-.message.has-mention[_ngcontent-uer-c51] {
-    background-color: rgba(var(--wasd-color-switch--rgb), .08)
-}
-
 .message__img[_ngcontent-uer-c51] {
     background-color: var(--wasd-color-white);
     background-position: 50%;
@@ -377,4 +373,13 @@ span.chat-message-text.stickertext {
 .block__messages__item,
 #loader_div {
     display: flex;
+}
+
+/* rlm */
+.block-wrapper[_ngcontent-uer-c53] .block__messages[_ngcontent-uer-c53] {
+  top: 100%;
+  margin-top: -100%;
+  position: sticky;
+  height: max-content;
+  width: 100%;
 }

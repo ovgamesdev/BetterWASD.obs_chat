@@ -121,6 +121,13 @@ let spawner = {
   newMessage() {
     let data = list.users[spawner.randomNumber(1, 20)]
     let message = list.message[spawner.randomNumber(1, 38)]
+    
+    let div = document.createElement('div')
+    div.setAttribute('_ngcontent-uer-c53', '')
+    div.setAttribute('username', data['username'])
+    div.setAttribute('message', message)
+    div.setAttribute('role', data['role'])
+    div.classList.add('block__messages__item')
 
     message = HelperWASD.textToURL(message);
 
@@ -131,14 +138,6 @@ let spawner = {
     message = HelperTV7.replaceText(message)
     message = HelperBTTV.replaceText(message)
     message = HelperFFZ.replaceText(message)
-
-
-    let div = document.createElement('div')
-    div.setAttribute('_ngcontent-uer-c53', '')
-    div.setAttribute('username', data['username'])
-    div.setAttribute('message', message)
-    div.setAttribute('role', data['role'])
-    div.classList.add('block__messages__item')
 
     let isOwner  = data['role'].indexOf('owner')     != -1
     let isMod    = data['role'].indexOf('moderator') != -1

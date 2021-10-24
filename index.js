@@ -65,6 +65,11 @@ var setting = {
     if (!settings.wasd.mtc) settings.wasd.mtc = 'rgba(var(--wasd-color-switch--rgb), .88)'
     cssCode += `.message__info__text {color: ${settings.wasd.mtc};}`
 
+    if (typeof settings.wasd.mentionSelf != 'boolean') settings.wasd.mentionSelf = true
+    if (typeof settings.wasd.cms != 'string') settings.wasd.cms = 'rgba(var(--wasd-color-switch--rgb), .08)'
+
+    cssCode += `.message.has-mention {background-color: ${settings.wasd.cms}!important}`
+
     if (setting.style) {
       if (typeof setting.style.styleSheet !== 'undefined') {
         setting.style.styleSheet.cssText = cssCode;
@@ -508,8 +513,7 @@ const socket = {
     </wasd-chat-message>`
     messages_div.append(div)
 
-    if (!settings.wasd.mention) settings.wasd.mention = true
-    if (settings.wasd.mention && message_text.indexOf(socket.current.channel.channel_owner.user_login) != -1) {
+    if (settings.wasd.mentionSelf && socket.current && message_text.indexOf(socket.current.channel.channel_owner.user_login) != -1) {
       div.querySelector('.message').classList.add('has-mention')
     }
 
