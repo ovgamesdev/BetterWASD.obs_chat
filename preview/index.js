@@ -154,6 +154,7 @@ let spawner = {
     let div = document.createElement('div')
     div.setAttribute('_ngcontent-uer-c53', '')
     div.setAttribute('username', data['username'])
+    div.setAttribute('usernamelc', data['username'].toLowerCase())
     div.setAttribute('message', message)
     div.setAttribute('role', data['role'])
     div.classList.add('block__messages__item')
