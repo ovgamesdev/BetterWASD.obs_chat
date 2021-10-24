@@ -70,6 +70,34 @@ var setting = {
 
     cssCode += `.message.has-mention {background-color: ${settings.wasd.cms}!important}`
 
+    if (typeof settings.wasd.list == 'undefined') settings.wasd.list = {
+      blockUserList: {},
+      blockTermList: {},
+      highlightUserList: {},
+      highlightTermList: {},
+      blockRoleList: {}
+    }
+    if (typeof settings.wasd.rMBL == 'undefined') settings.wasd.rMBL = true
+    for (let user in settings.wasd.list.blockUserList) {
+      cssCode += `.block__messages__item[usernamelc="${user.toLowerCase()}"] {display: none!important;}`
+      if (settings.wasd.rMBL) {
+        cssCode += `.block__messages__item[mention*="${user.toLowerCase()}"] {display: none!important;}`
+      }
+    }
+    for (let term in settings.wasd.list.highlightTermList) {
+      let setting = settings.wasd.list.highlightTermList[term]
+      cssCode += `.block__messages__item[message*="${setting.term}"] {background-color: ${setting.color}!important;}`
+    }
+
+    for (let term in settings.wasd.list.blockTermList) {
+      cssCode += `.block__messages__item[message*="${term}"] {display: none!important;}`
+    }
+
+    for (let user in settings.wasd.list.highlightUserList) {
+      let setting = settings.wasd.list.highlightUserList[user]
+      cssCode += `.block__messages__item[usernamelc="${setting.username.toLowerCase()}"] {background-color: ${setting.color}!important;}`
+    }
+
     if (setting.style) {
       if (typeof setting.style.styleSheet !== 'undefined') {
         setting.style.styleSheet.cssText = cssCode;
@@ -453,6 +481,7 @@ const socket = {
     let div = document.createElement('div')
     div.setAttribute('_ngcontent-uer-c53', '')
     div.setAttribute('username', JSData[1].user_login)
+    div.setAttribute('usernamelc', JSData[1].user_login.toLowerCase())
     div.setAttribute('message', JSData[1].message)
     div.setAttribute('user_id', JSData[1].user_id)
 
@@ -550,6 +579,7 @@ const socket = {
     let div = document.createElement('div')
     div.setAttribute('_ngcontent-uer-c53', '')
     div.setAttribute('username', JSData[1].user_login)
+    div.setAttribute('usernamelc', JSData[1].user_login.toLowerCase())
     div.setAttribute('sticker', JSData[1].sticker.sticker_image[settings.wasd.ss])
     div.setAttribute('user_id', JSData[1].user_id)
     
