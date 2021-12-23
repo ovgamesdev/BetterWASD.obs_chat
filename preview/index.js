@@ -1,16 +1,16 @@
-var setting = {
+var chat = {
   style: null,
   init() {
     if (this.style === null) {
       this.style = document.createElement('style');
       this.style.type = 'text/css';
       document.body.append(this.style);
-      setting.update();
+      chat.update();
     }
   },
   changeSettimgs(data) {
     settings.wasd = data
-    setting.update()
+    chat.update()
     console.log('update settings', settings.wasd)
   },
   update() {
@@ -103,6 +103,11 @@ var setting = {
     if (!settings.wasd.mtc) settings.wasd.mtc = 'rgba(var(--wasd-color-switch--rgb), .88)'
     cssCode += `.message__info__text {color: ${settings.wasd.mtc};}`
 
+    if (typeof settings.wasd.mtsc != 'string') settings.wasd.mtsc = '#000'
+    if (settings.wasd.mts) {
+      cssCode += `.message__info__text {text-shadow: 0 0 1px ${settings.wasd.mtsc}, 0 0 2px ${settings.wasd.mtsc};}`
+    }
+
     if (typeof settings.wasd.list == 'undefined') settings.wasd.list = {
       blockUserList: {},
       blockTermList: {},
@@ -118,8 +123,8 @@ var setting = {
       }
     }
     for (let term in settings.wasd.list.highlightTermList) {
-      let setting = settings.wasd.list.highlightTermList[term]
-      cssCode += `.block__messages__item[message*="${setting.term}"] {background-color: ${setting.color}!important;}`
+      let s = settings.wasd.list.highlightTermList[term]
+      cssCode += `.block__messages__item[message*="${s.term}"] {background-color: ${s.color}!important;}`
     }
 
     for (let term in settings.wasd.list.blockTermList) {
@@ -127,17 +132,17 @@ var setting = {
     }
 
     for (let user in settings.wasd.list.highlightUserList) {
-      let setting = settings.wasd.list.highlightUserList[user]
-      cssCode += `.block__messages__item[usernamelc="${setting.username.toLowerCase()}"] {background-color: ${setting.color}!important;}`
+      let s = settings.wasd.list.highlightUserList[user]
+      cssCode += `.block__messages__item[usernamelc="${s.username.toLowerCase()}"] {background-color: ${s.color}!important;}`
     }
 
 
-    if (setting.style) {
-      if (typeof setting.style.styleSheet !== 'undefined') {
-        setting.style.styleSheet.cssText = cssCode;
+    if (chat.style) {
+      if (typeof chat.style.styleSheet !== 'undefined') {
+        chat.style.styleSheet.cssText = cssCode;
       } else {
-        setting.style.innerHTML = '';
-        setting.style.appendChild(document.createTextNode(cssCode));
+        chat.style.innerHTML = '';
+        chat.style.appendChild(document.createTextNode(cssCode));
       }
 
       console.log('style inited')
@@ -152,7 +157,6 @@ let spawner = {
     let message = list.message[spawner.randomNumber(1, 38)]
     
     let div = document.createElement('div')
-    div.setAttribute('_ngcontent-uer-c53', '')
     div.setAttribute('username', data['username'])
     div.setAttribute('usernamelc', data['username'].toLowerCase())
     div.setAttribute('message', message)
@@ -185,29 +189,29 @@ let spawner = {
     if (!settings.wasd.sbs) isSub   = false
     if (!settings.wasd.sba) isAdmin = false
 
-    div.innerHTML = `<wasd-chat-message _ngcontent-uer-c53="" _nghost-uer-c51="">
-      <div _ngcontent-uer-c51="" class="message is-time">
-        <div _ngcontent-uer-c51=""style="display: none" class="message__time h-mm"> ${moment().format('h:mm')} </div>
-        <div _ngcontent-uer-c51=""style="display: none" class="message__time h-mm-ss"> ${moment().format('h:mm:ss')} </div>
-        <div _ngcontent-uer-c51=""style="display: none" class="message__time H-mm"> ${moment().format('H:mm')} </div>
-        <div _ngcontent-uer-c51=""style="display: none" class="message__time H-mm-ss"> ${moment().format('H:mm:ss')} </div>
-        <div _ngcontent-uer-c51=""style="display: none" class="message__time hh-mm"> ${moment().format('hh:mm')} </div>
-        <div _ngcontent-uer-c51=""style="display: none" class="message__time hh-mm-ss"> ${moment().format('hh:mm:ss')} </div>
-        <div _ngcontent-uer-c51=""style="display: none" class="message__time HH-mm"> ${moment().format('HH:mm')} </div>
-        <div _ngcontent-uer-c51=""style="display: none" class="message__time HH-mm-ss"> ${moment().format('HH:mm:ss')} </div>
+    div.innerHTML = `<wasd-chat-message>
+      <div class="message is-time">
+        <div style="display: none" class="message__time h-mm"> ${moment().format('h:mm')} </div>
+        <div style="display: none" class="message__time h-mm-ss"> ${moment().format('h:mm:ss')} </div>
+        <div style="display: none" class="message__time H-mm"> ${moment().format('H:mm')} </div>
+        <div style="display: none" class="message__time H-mm-ss"> ${moment().format('H:mm:ss')} </div>
+        <div style="display: none" class="message__time hh-mm"> ${moment().format('hh:mm')} </div>
+        <div style="display: none" class="message__time hh-mm-ss"> ${moment().format('hh:mm:ss')} </div>
+        <div style="display: none" class="message__time HH-mm"> ${moment().format('HH:mm')} </div>
+        <div style="display: none" class="message__time HH-mm-ss"> ${moment().format('HH:mm:ss')} </div>
         <!---->
-        <div _ngcontent-uer-c51="" class="message__img"><img _ngcontent-uer-c51="" wasdlazyvisibleclass="visible" alt="" src="https://static.wasd.tv/avatars/user/${data['icon']}.png" class="visible"></div>
+        <div class="message__img"><img wasdlazyvisibleclass="visible" alt="" src="https://static.wasd.tv/avatars/user/${data['icon']}.png" class="visible"></div>
         <!---->
         <!---->
-        <div _ngcontent-uer-c51="" class="message__info">
-          <div _ngcontent-uer-c51="" class="message__info__text">
-            <div _ngcontent-uer-c51="" class="info__text__status">
+        <div class="message__info">
+          <div class="message__info__text">
+            <div class="info__text__status">
               ${isModDev ? `<div ovg="" class="info__text__status-dev" style="background-color: ${HelperWASD.userColors[data['userid'] % (HelperWASD.userColors.length - 1)]};"><i badge="" class="icon wasd-icons-dev"></i></div>` : ``}
-              ${isSub ? `<div _ngcontent-uer-c51="" class="info__text__status-paid" style="background-color: ${HelperWASD.userColors[data['userid'] % (HelperWASD.userColors.length - 1)]};"><i _ngcontent-uer-c51="" class="icon wasd-icons-star"></i></div>` : ``}
-              <div _ngcontent-uer-c51="" username="${data['username']}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${HelperWASD.userColors[data['userid'] % (HelperWASD.userColors.length - 1)]}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${data['username']}</div>
+              ${isSub ? `<div class="info__text__status-paid" style="background-color: ${HelperWASD.userColors[data['userid'] % (HelperWASD.userColors.length - 1)]};"><i class="icon wasd-icons-star"></i></div>` : ``}
+              <div username="${data['username']}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${HelperWASD.userColors[data['userid'] % (HelperWASD.userColors.length - 1)]}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${data['username']}</div>
             </div>
 
-            <div _ngcontent-uer-c51="" class="message-text"><span _ngcontent-uer-c51=""> ${message} </span>
+            <div class="message-text"><span> ${message} </span>
             </div>
             <!---->
           </div>
@@ -425,11 +429,5 @@ const loader = {
   },
   updateStatus(title='', description='') {
     if (loader.div) loader.div.querySelector('.block__item__text').textContent = `${title} ${description ? `(${description})` : ''}`
-  },
-  end() {
-    if (loader.div) setTimeout(() => {
-      loader.div.style['animation']         = 'animation: fadeOut 0.5s ease 30000ms forwards;'
-      loader.div.style['-webkit-animation'] = 'animation: fadeOut 0.5s ease 30000ms forwards;'
-    }, 1500)
   }
 }

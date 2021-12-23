@@ -96,4 +96,22 @@ const HelperWASD = {
       }
     });
   },
+  loadStyle() {
+
+    loader.updateStatus('Загрузка стиля') // log
+    $.ajax({
+      url: new URL(document.URL).searchParams.get('style'),
+      success: function(out) {
+        try {
+          document.querySelector('style.custom').innerHTML = JSON.parse(out).style
+        } catch (err) {
+          loader.updateStatus('Ошибка загрузки стиля', err) // log
+        }
+      },
+      error: function(err) {
+        loader.updateStatus('Ошибка загрузки стиля', err) // log
+      }
+    })
+
+  }
 }

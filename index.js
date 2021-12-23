@@ -1,17 +1,10 @@
-var setting = {
-  style: null,
+var chat = {
+  style: document.querySelector('style.setting'),
   init() {
-    if (this.style === null) {
-      this.style = document.createElement('style');
-      this.style.type = 'text/css';
-      document.body.append(this.style);
-      setting.update();
-    }
+    chat.update();
   },
   update() {
     let cssCode = ''
-
-    cssCode += `.body-container { background: rgba(0,0,0,0)!important; }`
 
     if (settings.wasd.theme.toString() === '0') {
       cssCode += 'body{--wasd-color-black:#000000!important;--wasd-color-black--rgb:0,0,0!important;--wasd-color-white:#ffffff!important;--wasd-color-white--rgb:255,255,255!important;--wasd-color-corp-prime:#1A202C!important;--wasd-color-corp-prime--rgb:26,32,44!important;--wasd-color-corp-gray:#848CA0!important;--wasd-color-corp-gray--rgb:132,140,160!important;--wasd-color-dark-blue:#483cb8!important;--wasd-color-corp-blue:#258fe5!important;--wasd-color-corp-blue--rgb:37,143,229!important;--wasd-color-warning:#d85252!important;--wasd-color-warning--rgb:216,82,82!important;--wasd-color-success:#6ba131!important;--wasd-color-success--rgb:107,161,49!important;--wasd-color-event1:#913CA7!important;--wasd-color-event2:#5BC3C1!important;--wasd-color-event3:#F5A623!important;--wasd-color-xp:#9013fe!important;--wasd-color-bordo:#a5276d!important;--wasd-color-prime:#ffffff!important;--wasd-color-prime--rgb:255,255,255!important;--wasd-color-switch:#1A202C!important;--wasd-color-switch--rgb:26,32,44!important;--wasd-color-second:#f0f0f8!important;--wasd-color-third:#e0e0e8!important;--wasd-color-gray1:#848ca0!important;--wasd-color-gray2:#444858!important;--wasd-color-gray3:#242830!important;--wasd-color-text-prime:rgba(26, 32, 44, 1)!important;--wasd-color-text-second:rgba(26, 32, 44, 0.8)!important;--wasd-color-text-third:rgba(26, 32, 44, 0.64)!important;--wasd-color-text-fourth:rgba(26, 32, 44, 0.48)!important;--wasd-color-text-disabled:rgba(26, 32, 44, 0.24)!important;--wasd-color-bg-prime:#f0f0f8!important;--wasd-color-bg-second:#e0e0e9!important;--color-lowest-layer:rgba(198, 209, 225, 0.2)!important;--color-background:246,247,248!important;--color-first-layer:#FBFBFB!important;--color-second-layer:#FFFFFF!important;--color-upper-layer:#FFFFFF!important;--color-switch:20,24,32!important;--color-shadow:36,102,146!important;--color-system-blue:0,143,236!important;--color-system-dark-blue:13,110,200!important;--color-system-white:255,255,255!important;--color-system-black:0,0,0!important;--color-system-warning:252,77,100!important;--color-system-attention:243,173,56!important;--color-system-success:62,189,65!important;--color-system-xp:144,19,254!important;--color-additional-yellow-light:#F0DF47!important;--color-additional-yellow-dark:#DBC92A!important;--color-additional-yellow-orange:#F8B23E!important;--color-additional-orange:#E88021!important;--color-additional-red:#D03F3F!important;--color-additional-pink:#CD317C!important;--color-additional-lilac:#952BA7!important;--color-additional-violet:#6227E0!important;--color-additional-blue:#2264E3!important;--color-additional-blue-light:#27B4E0!important;--color-additional-aquamarine:#00CBBF!important;--color-additional-blue-green:#27E087!important;--color-additional-green-acid:#2BE027!important;--color-additional-green:#139520!important;--color-additional-green-light:#A6D323!important;--color-additional-gray:#898989!important}';
@@ -70,6 +63,11 @@ var setting = {
 
     cssCode += `.message.has-mention {background-color: ${settings.wasd.cms}!important}`
 
+    if (typeof settings.wasd.mtsc != 'string') settings.wasd.mtsc = '#000'
+    if (settings.wasd.mts) {
+      cssCode += `.message__info__text {text-shadow: 0 0 1px ${settings.wasd.mtsc}, 0 0 2px ${settings.wasd.mtsc};}`
+    }
+
     if (typeof settings.wasd.list == 'undefined') settings.wasd.list = {
       blockUserList: {},
       blockTermList: {},
@@ -85,8 +83,8 @@ var setting = {
       }
     }
     for (let term in settings.wasd.list.highlightTermList) {
-      let setting = settings.wasd.list.highlightTermList[term]
-      cssCode += `.block__messages__item[message*="${setting.term}"] {background-color: ${setting.color}!important;}`
+      let s = settings.wasd.list.highlightTermList[term]
+      cssCode += `.block__messages__item[message*="${s.term}"] {background-color: ${s.color}!important;}`
     }
 
     for (let term in settings.wasd.list.blockTermList) {
@@ -94,17 +92,14 @@ var setting = {
     }
 
     for (let user in settings.wasd.list.highlightUserList) {
-      let setting = settings.wasd.list.highlightUserList[user]
-      cssCode += `.block__messages__item[usernamelc="${setting.username.toLowerCase()}"] {background-color: ${setting.color}!important;}`
+      let s = settings.wasd.list.highlightUserList[user]
+      cssCode += `.block__messages__item[usernamelc="${s.username.toLowerCase()}"] {background-color: ${s.color}!important;}`
     }
 
-    if (setting.style) {
-      if (typeof setting.style.styleSheet !== 'undefined') {
-        setting.style.styleSheet.cssText = cssCode;
-      } else {
-        setting.style.innerHTML = '';
-        setting.style.appendChild(document.createTextNode(cssCode));
-      }
+    if (chat.style) {
+
+      chat.style.innerHTML = '';
+      chat.style.appendChild(document.createTextNode(cssCode));
 
       console.log('style inited')
 
@@ -129,6 +124,8 @@ const socket = {
       headers: { 'Access-Control-Allow-Origin': 'https://wasd.tv' },
       success: function(out) {
         socket.current = out.result
+        document.title = `WASD CHAT | ${socket.current.channel.channel_owner.user_login}`
+
         if (!document.querySelector('.hidden.info__text__status__name')) {
           let dd = document.createElement('div')
           dd.classList.add('info__text__status__name')
@@ -158,7 +155,7 @@ const socket = {
         }, 30000)
       },
       error: function(err) {
-        console.log('err', err)
+        loader.updateStatus(err.responseJSON.error.details, `channel_name -> ${err.responseJSON.error.code}`) // log
         setTimeout(() => {
           socket.initChat()
         }, 30000)
@@ -228,7 +225,6 @@ const socket = {
                 url: `https://wasd.tv/api/chat/streams/${socket.streamId}/messages?limit=49&offset=0`,
                 headers: { 'Access-Control-Allow-Origin': 'https://wasd.tv' },
                 success: function(out) {
-                  loader.end()
                   for (let date of out.result.reverse()) {
                     if (date.type == "MESSAGE") {
                       socket.onMessage(['message', date.info, date.id])
@@ -522,14 +518,14 @@ const socket = {
 
     div.classList.add('block__messages__item')
 
-    let msg_class = `message${settings.wasd.stime ? ` is-time` : ''}`
+    let _class = `class="message${settings.wasd.stime ? ` is-time` : ''}"`
     let time = `${settings.wasd.stime ? `<div class="message__time"> ${parser.time(JSData)} </div>` : ''}`
     let avatar = `${settings.wasd.simg ? `<div class="message__img"><img wasdlazyvisibleclass="visible" alt="" src="${parser.avatar(JSData)}" class="visible"></div>` : '' }`
     let sub = `${isSub ? `<div class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i class="icon wasd-icons-star"></i></div>` : ``}`
     let username = `<div username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>`
 
     div.innerHTML = `<wasd-chat-message>
-      <div class="${msg_class}">
+      <div ${_class}>
         ${time}
         ${avatar}
         <div class="message__info">
@@ -619,27 +615,27 @@ const socket = {
     if (!settings.wasd.sba) isAdmin = false
 
     div.classList.add('block__messages__item')
+
+    let _class = `class="message ${settings.wasd.stime ? ` is-time` : ''}"`
+    let time = `${settings.wasd.stime ? `<div class="message__time"> ${parser.time(JSData)} </div>` : ''}`
+    let avatar = `${settings.wasd.simg ? `<div class="message__img"><img wasdlazyvisibleclass="visible" alt="" src="${parser.avatar(JSData)}" class="visible"></div>` : '' }`
+    let sub = `${isSub ? `<div class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i class="icon wasd-icons-star"></i></div>` : ``}`
+    let username = `<div username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>`
+    let sticker = `<img alt="sticker" class="sticker" src="${JSData[1].sticker.sticker_image[settings.wasd.ss]}"> <span class="chat-message-text stickertext sticker_text">Стикер</span>`
     div.innerHTML = `<wasd-chat-message>
-      <div class="message ${settings.wasd.stime ? ` is-time` : ''}">
-        ${settings.wasd.stime ? `<div class="message__time"> ${parser.time(JSData)} </div>` : ''}
-        <!---->
-        ${settings.wasd.simg ? `<div class="message__img"><img wasdlazyvisibleclass="visible" alt="" src="${parser.avatar(JSData)}" class="visible"></div>` : '' }
-        <!---->
-        <!---->
+      <div ${_class}>
+        ${time}
+        ${avatar}
         <div class="message__info">
           <div class="message__info__text">
             <div class="info__text__status">
-              ${isSub ? `<div class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i class="icon wasd-icons-star"></i></div>` : ``}
-              <div username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>
+              ${sub}
+              ${username}
             </div>
-
             <div class="message-text"><span> </span>
-              <img alt="sticker" class="sticker" src="${JSData[1].sticker.sticker_image[settings.wasd.ss]}">
-              <span class="chat-message-text stickertext sticker_text">Стикер</span>
+              ${sticker}
             </div>
-            <!---->
           </div>
-          <!---->
         </div>
       </div>
     </wasd-chat-message>`
@@ -741,12 +737,10 @@ const parser = {
 
 const loader = {
   div: document.querySelector('#loader_div'),
-  create() {
-
-  },
   updateStatus(title='', description='', top=false) {
-    if (document.querySelector('#loader_div')) {
-      loader.div.querySelector('.block__item__text').textContent = `${title} ${description ? `(${description})` : ''}`
+    console.log(title, description)
+    if (messages_div.lastElementChild.id == 'loader_div') {
+      messages_div.lastElementChild.querySelector('.block__item__text').textContent = `${title} ${description ? `(${description})` : ''}`
     } else if (top) {
       loader.div = document.createElement('div')
       loader.div.id = 'loader_div'
@@ -759,12 +753,6 @@ const loader = {
       </wasd-chat-system-message>`
       messages_div.append(loader.div)
       document.querySelector('.block').scrollTop = document.querySelector('.block').scrollHeight
-    }
-  },
-  end() {
-    if (loader.div) {
-      loader.div.style['animation'] = `fadeOut 0.5s ease ${settings.wasd.nma.toString()}ms forwards`
-      loader.div.style['-webkit-animation'] = `fadeOut 0.5s ease ${settings.wasd.nma.toString()}ms forwards`
     }
   }
 }
