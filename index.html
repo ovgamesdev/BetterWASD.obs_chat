@@ -68,7 +68,7 @@
 
   <script>
     let s = new URL(document.URL).searchParams.get('settings')
-    let c = new URL(document.URL).searchParams.get('channel_name')
+    // let c = new URL(document.URL).searchParams.get('channel_name')
 
     let settings = {}
 
@@ -76,16 +76,15 @@
       settings.wasd = JSON.parse(decodeURI(s).replace(/HASH/ig, '#'))
       chat.init()
 
-      if (c) {
-        load()
-      } else {
-        loader.updateStatus('Возможно вы изменяли ссылку', 'channel_name -> undefined') // log
-      }
+      // if (c) {
+      load()
+      // } else {
+      //   loader.updateStatus('Возможно вы изменяли ссылку', 'channel_name -> undefined') // log
+      // }
 
     } else {
       loader.updateStatus('Возможно вы изменяли ссылку', 'settings -> undefined') // log
       settings.wasd = {
-
         theme: 1,mf: false,ms: false,bes: 0,st: 1,frs: 1,ss: 'large',can: false,catm: true,hmb: false,sm: false,lc: "rgba(var(--wasd-color-switch--rgb),.88)",fl: true,fmst: "HH:mm",cma: true,acd: 0,fcbc: false,stime: false,simg: false,sdm: 0,sl: 0,anim: 0,nma: 15000,mtc: "rgba(var(--wasd-color-switch--rgb), .88)",sbo: true,sbm: true,sbs: true,sba: true,mentionSelf: true,cms: "rgba(var(--wasd-color-switch--rgb),.08)",bttv: '',ffz: '',tv7: '',list: {blockUserList: {},blockTermList: {},highlightUserList: {},highlightTermList: {},blockRoleList: {}},rMBL: true,
     }
       chat.init()
