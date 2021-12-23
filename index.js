@@ -330,13 +330,17 @@ const socket = {
               if (JSData[1].event_type == 'NEW_FOLLOWER' && !document.querySelector(`NEW_FOLLOWER.history [user_login="${JSData[1].payload.user_login}"]`)) {
                   
                 let div = document.createElement('div')
-                div.setAttribute('_ngcontent-uer-c53', '')
                 div.classList.add('block__messages__item')
+
+                let style = `${settings.wasd.cma ? `color: ${HelperWASD.userColors[JSData[1].payload.user_id % (HelperWASD.userColors.length - 1)]};` : ``}`
+                let username = JSData[1].payload.user_login
+                let text = 'Добавляет канал в избранное'
+
                 div.innerHTML = 
-                `<wasd-chat-follower-message _ngcontent-vpf-c53="" _nghost-vpf-c74="" style="margin-right: 36px;">
-                  <div _ngcontent-uer-c64="" class="message-follower">
-                    <div _ngcontent-uer-c64="" class="message-follower__name chat-message-mention" style="${settings.wasd.cma ? `color: ${HelperWASD.userColors[JSData[1].payload.user_id % (HelperWASD.userColors.length - 1)]};` : ``}" username="${JSData[1].payload.user_login}">${JSData[1].payload.user_login}</div>
-                    <div _ngcontent-uer-c64="" class="message-follower__text"><span _ngcontent-uer-c64="">Добавляет канал в избранное</span></div>
+                `<wasd-chat-follower-message style="margin-right: 36px;">
+                  <div class="message-follower">
+                    <div class="message-follower__name chat-message-mention" style="${style}" username="${username}">${username}</div>
+                    <div class="message-follower__text"><span>${text}</span></div>
                   </div>
                 </wasd-chat-follower-message>`
 
@@ -382,13 +386,17 @@ const socket = {
               // }
 
                 let div = document.createElement('div')
-                div.setAttribute('_ngcontent-uer-c53', '')
                 div.classList.add('block__messages__item')
+
+                let style = `${settings.wasd.cma ? `color: ${HelperWASD.userColors[JSData[1].user_id % (HelperWASD.userColors.length - 1)]};` : ``}`
+                let username = JSData[1].user_login
+                let text = `${JSData[1].product_name == 60 ? 'Оформляет подписку на 2 месяца' : 'Оформляет подписку на 1 месяц' }`
+
                 div.innerHTML = 
-                `<wasd-chat-follower-message _ngcontent-vpf-c53="" _nghost-vpf-c74="">
-                  <div _ngcontent-uer-c64="" class="message-follower">
-                    <div _ngcontent-uer-c64="" class="message-follower__name chat-message-mention" style="${settings.wasd.cma ? `color: ${HelperWASD.userColors[JSData[1].user_id % (HelperWASD.userColors.length - 1)]};` : ``}" username="${JSData[1].user_login}">${JSData[1].user_login}</div>
-                    <div _ngcontent-uer-c64="" class="message-follower__text"><span _ngcontent-uer-c64=""> ${JSData[1].product_name == 60 ? 'Оформляет подписку на 2 месяца' : 'Оформляет подписку на 1 месяц' } </span></div>
+                `<wasd-chat-follower-message style="margin-right: 36px;">
+                  <div class="message-follower">
+                    <div class="message-follower__name chat-message-mention" style="${style}" username="${username}">${username}</div>
+                    <div class="message-follower__text"><span>${text}</span></div>
                   </div>
                 </wasd-chat-follower-message>`
                 messages_div.append(div)
@@ -475,7 +483,6 @@ const socket = {
 
 
     let div = document.createElement('div')
-    div.setAttribute('_ngcontent-uer-c53', '')
     div.setAttribute('username', JSData[1].user_login)
     div.setAttribute('usernamelc', JSData[1].user_login.toLowerCase())
     div.setAttribute('message', JSData[1].message)
@@ -514,25 +521,26 @@ const socket = {
     if (!settings.wasd.sba) isAdmin = false
 
     div.classList.add('block__messages__item')
-    div.innerHTML = `<wasd-chat-message _ngcontent-uer-c53="" _nghost-uer-c51="">
-      <div _ngcontent-uer-c51="" class="message${settings.wasd.stime ? ` is-time` : ''}">
-        ${settings.wasd.stime ? `<div _ngcontent-uer-c51="" class="message__time"> ${parser.time(JSData)} </div>` : ''}
-        <!---->
-        ${settings.wasd.simg ? `<div _ngcontent-uer-c51="" class="message__img"><img _ngcontent-uer-c51="" wasdlazyvisibleclass="visible" alt="" src="${parser.avatar(JSData)}" class="visible"></div>` : '' }
-        <!---->
-        <!---->
-        <div _ngcontent-uer-c51="" class="message__info">
-          <div _ngcontent-uer-c51="" class="message__info__text">
-            <div _ngcontent-uer-c51="" class="info__text__status">
-              ${isSub ? `<div _ngcontent-uer-c51="" class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i _ngcontent-uer-c51="" class="icon wasd-icons-star"></i></div>` : ``}
-              <div _ngcontent-uer-c51="" username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>
-            </div>
 
-            <div _ngcontent-uer-c51="" class="message-text"><span _ngcontent-uer-c51=""> ${message_text} </span>
+    let msg_class = `message${settings.wasd.stime ? ` is-time` : ''}`
+    let time = `${settings.wasd.stime ? `<div class="message__time"> ${parser.time(JSData)} </div>` : ''}`
+    let avatar = `${settings.wasd.simg ? `<div class="message__img"><img wasdlazyvisibleclass="visible" alt="" src="${parser.avatar(JSData)}" class="visible"></div>` : '' }`
+    let sub = `${isSub ? `<div class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i class="icon wasd-icons-star"></i></div>` : ``}`
+    let username = `<div username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>`
+
+    div.innerHTML = `<wasd-chat-message>
+      <div class="${msg_class}">
+        ${time}
+        ${avatar}
+        <div class="message__info">
+          <div class="message__info__text">
+            <div class="info__text__status">
+              ${sub}
+              ${username}
             </div>
-            <!---->
+            <div class="message-text"><span> ${message_text} </span>
+            </div>
           </div>
-          <!---->
         </div>
       </div>
     </wasd-chat-message>`
@@ -573,7 +581,6 @@ const socket = {
 
 
     let div = document.createElement('div')
-    div.setAttribute('_ngcontent-uer-c53', '')
     div.setAttribute('username', JSData[1].user_login)
     div.setAttribute('usernamelc', JSData[1].user_login.toLowerCase())
     div.setAttribute('sticker', JSData[1].sticker.sticker_image[settings.wasd.ss])
@@ -612,22 +619,22 @@ const socket = {
     if (!settings.wasd.sba) isAdmin = false
 
     div.classList.add('block__messages__item')
-    div.innerHTML = `<wasd-chat-message _ngcontent-uer-c53="" _nghost-uer-c51="">
-      <div _ngcontent-uer-c51="" class="message ${settings.wasd.stime ? ` is-time` : ''}">
-        ${settings.wasd.stime ? `<div _ngcontent-uer-c51="" class="message__time"> ${parser.time(JSData)} </div>` : ''}
+    div.innerHTML = `<wasd-chat-message>
+      <div class="message ${settings.wasd.stime ? ` is-time` : ''}">
+        ${settings.wasd.stime ? `<div class="message__time"> ${parser.time(JSData)} </div>` : ''}
         <!---->
-        ${settings.wasd.simg ? `<div _ngcontent-uer-c51="" class="message__img"><img _ngcontent-uer-c51="" wasdlazyvisibleclass="visible" alt="" src="${parser.avatar(JSData)}" class="visible"></div>` : '' }
+        ${settings.wasd.simg ? `<div class="message__img"><img wasdlazyvisibleclass="visible" alt="" src="${parser.avatar(JSData)}" class="visible"></div>` : '' }
         <!---->
         <!---->
-        <div _ngcontent-uer-c51="" class="message__info">
-          <div _ngcontent-uer-c51="" class="message__info__text">
-            <div _ngcontent-uer-c51="" class="info__text__status">
-              ${isSub ? `<div _ngcontent-uer-c51="" class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i _ngcontent-uer-c51="" class="icon wasd-icons-star"></i></div>` : ``}
-              <div _ngcontent-uer-c51="" username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>
+        <div class="message__info">
+          <div class="message__info__text">
+            <div class="info__text__status">
+              ${isSub ? `<div class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i class="icon wasd-icons-star"></i></div>` : ``}
+              <div username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>
             </div>
 
-            <div _ngcontent-uer-c51="" class="message-text"><span _ngcontent-uer-c51=""> </span>
-              <img _ngcontent-uer-c51="" alt="sticker" class="sticker" src="${JSData[1].sticker.sticker_image[settings.wasd.ss]}">
+            <div class="message-text"><span> </span>
+              <img alt="sticker" class="sticker" src="${JSData[1].sticker.sticker_image[settings.wasd.ss]}">
               <span class="chat-message-text stickertext sticker_text">Стикер</span>
             </div>
             <!---->
@@ -667,12 +674,11 @@ const socket = {
   },
   systemMessage(text) {
     let message = document.createElement('div')
-    message.setAttribute('_ngcontent-uer-c53', '')
     message.classList.add('block__messages__item')
-    message.innerHTML = `<wasd-chat-system-message _ngcontent-uer-c53="" _nghost-uer-c64="">
-        <div _ngcontent-uer-c64="" class="block">
-          <div _ngcontent-uer-c64="" class="block__item">
-            <div _ngcontent-uer-c64="" class="block__item__text"> ${text} </div>
+    message.innerHTML = `<wasd-chat-system-message>
+        <div class="block">
+          <div class="block__item">
+            <div class="block__item__text"> ${text} </div>
           </div>
         </div>
       </wasd-chat-system-message>`
@@ -744,11 +750,10 @@ const loader = {
     } else if (top) {
       loader.div = document.createElement('div')
       loader.div.id = 'loader_div'
-      loader.div.setAttribute('_ngcontent-uer-c53', '')
-      loader.div.innerHTML = `<wasd-chat-system-message _ngcontent-uer-c53="" _nghost-uer-c64="">
-        <div _ngcontent-uer-c64="" class="block">
-          <div _ngcontent-uer-c64="" class="block__item">
-            <div _ngcontent-uer-c64="" class="block__item__text"> ${title} ${description ? '(' + description + ')' : `` } </div>
+      loader.div.innerHTML = `<wasd-chat-system-message>
+        <div class="block">
+          <div class="block__item">
+            <div class="block__item__text"> ${title} ${description ? '(' + description + ')' : `` } </div>
           </div>
         </div>
       </wasd-chat-system-message>`
