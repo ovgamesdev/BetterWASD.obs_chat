@@ -75,12 +75,8 @@
     if (s) {
       settings.wasd = JSON.parse(decodeURI(s).replace(/HASH/ig, '#'))
       chat.init()
-
-      // if (c) {
+      
       load()
-      // } else {
-      //   loader.updateStatus('Возможно вы изменяли ссылку', 'channel_name -> undefined') // log
-      // }
 
     } else {
       loader.updateStatus('Возможно вы изменяли ссылку', 'settings -> undefined') // log

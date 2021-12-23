@@ -1,7 +1,7 @@
 const Helper = {
 	BETA: `<a style="position: relative;" class="tooltip-wrapper" title="Эта опция находится в стадии разработки и может работать некорректно."><i _ngcontent-boj-c248="" class="wasd-icons-beta" style="font-size: 14px;"></i></a>`,
   tooltip(text, data, url = '') {
-	  return `<a style="position: relative;" class="tooltip-wrapper" ${url == '' ? '' : `href="${url}"`} title='${data}'>${text == '' ? '<i _ngcontent-boj-c248="" class="wasd-icons-notice" style="font-size: 14px;"></i>' : text}</a>`
+	  return `<a style="position: relative;" target="_blank" class="tooltip-wrapper" ${url == '' ? '' : `href="${url}"`} title='${data}'>${text == '' ? '<i _ngcontent-boj-c248="" class="wasd-icons-notice" style="font-size: 14px;"></i>' : text}</a>`
 	},
   getDefaultSettings() {
     return {
