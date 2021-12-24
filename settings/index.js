@@ -61,30 +61,8 @@ const BetterStreamChat = {
         <p>
         </p>
       </div>
-      <header>
 
-        <div class="header__left-side">
-          <a class="logo">
-            <img alt="BetterWASD.BOT" src="img/Wasd_Better_color_logo_dark.png">
-            <div class="logo__mob" tabindex="0"></div>
-          </a>
-
-          <wasd-input class="ng-valid ng-dirty ng-touched notfocused" id="settingsSearchDiv">
-            <div ovg="" class="wasd-input-wrapper">
-              <div ovg="" class="wasd-input">
-                <input ovg="" id="settingsSearch" class="has-button ng-pristine ng-untouched ng-valid ui-autocomplete-input" placeholder="Поиск настроек" type="text" autocomplete="off" style="margin: 0;">
-                <button ovg="" type="button" class="button-icon">
-                  <i ovg="" class="wasd-icons-search"></i>
-                </button>
-              </div>
-            </div>
-          </wasd-input>
-
-        </div>
-
-      </header>
-
-      <main class="active" data-tab="obschat" style="height: calc(100% - 48px);width: 70%;">
+      <main class="active" data-tab="obschat" style="width: 70%;">
         <h1 style="padding: 10px 10px 5px 10px;"> Чат для OBS с эмоциями </h1>
         ${HelperSettings.build('obschat')}
 
@@ -226,7 +204,7 @@ const BetterStreamChat = {
 
         <p style="padding: 20px 10px 5px 10px;">Если вы обновите ссылку на закрытую трансляцию, то чат в доступе по ссылке перестанет работать! </p>
       </main>
-      <iframe src="" class="obschat" style="height: calc(100% - 48px);width: 30%;"></iframe>
+      <iframe src="" class="obschat" style="width: 30%;"></iframe>
 
       <main class="text" data-tab="changelog">
         <h1>Журнал изменений</h1>
@@ -238,16 +216,16 @@ const BetterStreamChat = {
     document.body.append(settingsDiv);
     BetterStreamChat.changelog = changelogList[0]
 
-    settingsDiv.querySelector('#settingsSearchDiv button').addEventListener('click', () => {
-      settingsSearchDiv.classList.remove('notfocused')
-      settingsSearch.dispatchEvent(new Event('input'))
-      settingsSearch.focus()
-    });
+    // settingsDiv.querySelector('#settingsSearchDiv button').addEventListener('click', () => {
+    //   settingsSearchDiv.classList.remove('notfocused')
+    //   settingsSearch.dispatchEvent(new Event('input'))
+    //   settingsSearch.focus()
+    // });
 
-    settingsSearch.addEventListener('blur', () => {
-      settingsSearch.value = ''
-      settingsSearchDiv.classList.add('notfocused')
-    });
+    // settingsSearch.addEventListener('blur', () => {
+    //   settingsSearch.value = ''
+    //   settingsSearchDiv.classList.add('notfocused')
+    // });
 
     let fontStyle = document.createElement('style');
     fontStyle.type = 'text/css';
@@ -433,33 +411,6 @@ const BetterStreamChat = {
       });
     }
 
-    // bind search settings
-    var filter1, ul1, options1, title1, titleline1, i1;
-    settingsSearch.addEventListener('input', () => {
-      filter1 = settingsSearch.value.toUpperCase();
-      ul1 = document.querySelector("main[data-tab='obschat']");
-      options1 = ul1.querySelectorAll("div.option");
-      for (i1 = 0; i1 < options1.length; i1++) {
-        title1 = options1[i1].querySelector("span.title");
-        if (title1) {
-          if (title1.innerHTML.toUpperCase().indexOf(filter1) > -1) {
-            options1[i1].style.display = "";
-          } else {
-            options1[i1].style.display = "none";
-          }
-        }
-
-        titleline1 = options1[i1].querySelector("span.titleline");
-        if (titleline1) {
-          if (filter1 == '') {
-            options1[i1].style.display = "";
-          } else {
-            options1[i1].style.display = "none";
-          }
-        }
-      }
-    });
-
     // change event
     for (let option of settingsDiv.querySelectorAll('.optionField')) {
       option.addEventListener('change', (event) => {
@@ -491,6 +442,10 @@ let initialize = async () => {
     if (typeof settings === 'undefined') {
       settings = Helper.getDefaultSettings();
     }
+
+    settings.obschat.channelname   = new URL(document.URL).searchParams.get('channel_name') || ''
+    settings.obschat.closedViewUrl = new URL(document.URL).searchParams.get('private_link') || ''
+
     console.log('settings =', settings)
   } catch (e) {
     console.log('catch', e);

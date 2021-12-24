@@ -62,7 +62,7 @@ const Helper = {
 
       	Cookies.get('settings')
 
-      	console.log(Cookies.get('settings'))
+      	// console.log(Cookies.get('settings'))
 
         let defaultSettings = this.getDefaultSettings();
 
