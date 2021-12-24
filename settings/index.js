@@ -443,12 +443,13 @@ let initialize = async () => {
       settings = Helper.getDefaultSettings();
     }
 
+
     settings.obschat.channelname   = new URL(document.URL).searchParams.get('channel_name') || ''
     settings.obschat.closedViewUrl = new URL(document.URL).searchParams.get('private_link') || ''
 
     console.log('settings =', settings)
   } catch (e) {
-    console.log('catch', e);
+    console.error(e);
   }
   BetterStreamChat.init()
   HelperSettings.loaded()

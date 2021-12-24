@@ -60,20 +60,18 @@ const Helper = {
     return new Promise((resolve, reject) => {
       if (typeof chrome !== 'undefined') {
 
-      	// Cookies.get('settings')
-
-      	console.log(Cookies.get('settings'))
+      	// console.log(Cookies.get('settings'))
 
         let defaultSettings = this.getDefaultSettings();
-
         let items = {}
 
         try {
-          items = JSON.parse(Cookies.get('settings'))
+          let items = JSON.parse( Cookies.get('settings') ) || {};
+        } catch (e) {
+          console.error(e)
         }
 
         if (typeof items?.obschat !== 'undefined') {
-          items = items || {};
 
           for (let key in defaultSettings) {
             if (defaultSettings.hasOwnProperty(key)) {
