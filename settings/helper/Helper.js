@@ -60,13 +60,17 @@ const Helper = {
     return new Promise((resolve, reject) => {
       if (typeof chrome !== 'undefined') {
 
-      	Cookies.get('settings')
+      	// Cookies.get('settings')
 
-      	// console.log(Cookies.get('settings'))
+      	console.log(Cookies.get('settings'))
 
         let defaultSettings = this.getDefaultSettings();
 
-        let items = JSON.parse(Cookies.get('settings'))
+        let items = {}
+
+        try {
+          items = JSON.parse(Cookies.get('settings'))
+        }
 
         if (typeof items?.obschat !== 'undefined') {
           items = items || {};
