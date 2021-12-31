@@ -740,7 +740,13 @@ const loader = {
   updateStatus(title='', description='', top=false) {
     console.log(title, description)
     if (messages_div.lastElementChild.id == 'loader_div') {
+      loader.div.style['animation'] = ''
+      loader.div.style['-webkit-animation'] = ''
+
       messages_div.lastElementChild.querySelector('.block__item__text').textContent = `${title} ${description ? `(${description})` : ''}`
+
+      loader.div.style['animation'] = 'fadeOut 0s ease 15000ms forwards'
+      loader.div.style['-webkit-animation'] = 'fadeOut 0s ease 15000ms forwards'
     } else if (top) {
       loader.div = document.createElement('div')
       loader.div.id = 'loader_div'
