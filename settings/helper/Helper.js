@@ -60,7 +60,7 @@ const Helper = {
     return new Promise((resolve, reject) => {
       if (typeof chrome !== 'undefined') {
 
-      	// console.log(Cookies.get('settings'))
+      	console.log(Cookies.get('settings'))
 
         let defaultSettings = this.getDefaultSettings();
         let items = {}
