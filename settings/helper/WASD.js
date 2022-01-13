@@ -6,8 +6,9 @@ const HelperWASD = {
     let item = document.createElement('tr')
     item.classList.add(`table-menu__block`)
     item.style = 'justify-content: space-between;'
-
-    let usernameed = settings.wasd.userNameEdited[username.trim().split('@').join('')];
+    
+    let usernameed = username
+    // let usernameed = settings.wasd.userNameEdited[username.trim().split('@').join('')];
     item.innerHTML = `<td><div><p title="${username}"> ${usernameed ? usernameed+' ('+username+')' : username} </p></div></td> <td><div><p> ${(new Date(settings.obschat.list.blockUserList[username])).toLocaleString()} </p></div></td> <td class="td-btn-remove"><div> <ovg-button class="flat-btn ovg removeUser"> <button class="medium ovg remove warning" data="${username}"><i class="wasd-icons-delete" style="pointer-events: none;"></i></button> <ovg-tooltip><div class="tooltip tooltip_position-top tooltip_size-small" style="width: 260px;"><div class="tooltip-content tooltip-content_left"> Удалить </div></div></ovg-tooltip> </ovg-button> </div></td>`;
     item.setAttribute('data', username)
     html.append(item)
@@ -26,7 +27,8 @@ const HelperWASD = {
     item.classList.add(`table-menu__block`)
     item.style = 'justify-content: space-between;'
 
-    let usernameed = settings.wasd.userNameEdited[username.trim().split('@').join('')];
+    let usernameed = username
+    // let usernameed = settings.wasd.userNameEdited[username.trim().split('@').join('')];
     let setting = settings.obschat.list.highlightUserList[username]
 
     item.innerHTML = `<td><div><p title="${username}, ${setting.color}, ${setting.register}"> ${usernameed ? usernameed+' ('+username+')' : username} </p></div></td> <td><div><p> ${new Date(setting.date).toLocaleString()} </p></div></td> <td><div><p><div class="clr-field" style="color: ${setting.color};height: 24px;width: 34px;"><button aria-labelledby="clr-open-label"></button></div></p></div></td> <td class="td-btn-remove"><div> <ovg-button class="flat-btn ovg removeUser"> <button class="medium ovg remove warning" data="${username}"><i class="wasd-icons-delete" style="pointer-events: none;"></i></button> <ovg-tooltip><div class="tooltip tooltip_position-top tooltip_size-small" style="width: 260px;"><div class="tooltip-content tooltip-content_left"> Удалить </div></div></ovg-tooltip> </ovg-button> </div></td>`;
@@ -89,7 +91,7 @@ const HelperWASD = {
     } else {
       HelperSettings.showMessage('Пользователь уже в obs ЧС')
     }
-    blacklistAddUser.value = ''
+    obs_blacklistAddUser.value = ''
   },
   obs_addUserToHL(user, color = '', register = true) {
     let username = user.trim().split('@').join('')
@@ -105,7 +107,7 @@ const HelperWASD = {
     } else {
       HelperSettings.showMessage('Пользователь уже в obs ЧС')
     }
-    highlightAddUser.value = ''
+    obs_highlightAddUser.value = ''
   },
   obs_addTermToBL(t) {
     let term = t.trim()
@@ -117,7 +119,7 @@ const HelperWASD = {
     } else {
       HelperSettings.showMessage('Пользователь уже в obs ЧС')
     }
-    blacklistAddTerm.value = ''
+    obs_blacklistAddTerm.value = ''
   },
   obs_addTermToHL(t, color = '', register = true, whole = true) {
     let term = t.trim()
@@ -134,7 +136,7 @@ const HelperWASD = {
     } else {
       HelperSettings.showMessage('Пользователь уже в obs ЧС')
     }
-    highlightAddTerm.value = ''
+    obs_highlightAddTermColor.value = ''
   },
   
 }
