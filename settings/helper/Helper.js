@@ -66,7 +66,7 @@ const Helper = {
         let items = {}
 
         try {
-          let items = JSON.parse( Cookies.get('settings') ) || {};
+          items = JSON.parse( Cookies.get('settings') ) || {};
         } catch (e) {
           console.error(e)
         }
