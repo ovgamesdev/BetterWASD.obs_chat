@@ -155,7 +155,7 @@ const socket = {
         }, 30000)
       },
       error: function(err) {
-        loader.updateStatus(err.responseJSON.error.details, `channel_name -> ${err.responseJSON.error.code}`) // log
+        loader.updateStatus(err?.responseJSON?.error?.details, `channel_name -> ${err?.responseJSON?.error?.code}`) // log
         setTimeout(() => {
           socket.initChat()
         }, 30000)
@@ -441,7 +441,7 @@ const socket = {
       socket.socketd = null
       console.log(`[error]`, error);
       loader.updateStatus('Соединение прервано', 'error', true) // log
-      //socket.start()
+      // socket.start()
     };
   },
   stop(code, reason) {
