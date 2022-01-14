@@ -155,7 +155,13 @@ const socket = {
         }, 30000)
       },
       error: function(err) {
-        loader.updateStatus(err?.responseJSON?.error?.details, `channel_name -> ${err?.responseJSON?.error?.code}`) // log
+        try {
+          loader.updateStatus(err.responseJSON.error.details, `channel_name -> ${err.responseJSON.error.code}`) // log
+        } catch (err) {
+          loader.updateStatus('Неизвестная ошибка') // log
+          console.log(err)
+        }
+        
         setTimeout(() => {
           socket.initChat()
         }, 30000)
