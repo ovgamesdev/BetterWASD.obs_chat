@@ -6,9 +6,8 @@ const HelperWASD = {
     let item = document.createElement('tr')
     item.classList.add(`table-menu__block`)
     item.style = 'justify-content: space-between;'
-    
-    let usernameed = username
-    // let usernameed = settings.wasd.userNameEdited[username.trim().split('@').join('')];
+
+    let usernameed = settings.wasd.userNameEdited[username.trim().split('@').join('')];
     item.innerHTML = `<td><div><p title="${username}"> ${usernameed ? usernameed+' ('+username+')' : username} </p></div></td> <td><div><p> ${(new Date(settings.obschat.list.blockUserList[username])).toLocaleString()} </p></div></td> <td class="td-btn-remove"><div> <ovg-button class="flat-btn ovg removeUser"> <button class="medium ovg remove warning" data="${username}"><i class="wasd-icons-delete" style="pointer-events: none;"></i></button> <ovg-tooltip><div class="tooltip tooltip_position-top tooltip_size-small" style="width: 260px;"><div class="tooltip-content tooltip-content_left"> Удалить </div></div></ovg-tooltip> </ovg-button> </div></td>`;
     item.setAttribute('data', username)
     html.append(item)
@@ -16,7 +15,7 @@ const HelperWASD = {
       let nickname = target.getAttribute('data')
       delete settings.obschat.list.blockUserList[nickname];
       item.remove()
-      HelperSettings.showMessage(`Пользователь ${nickname} удален из ЧС`, 'success')
+      HelperWASD.showChatMessage(`Пользователь ${nickname} удален из ЧС`, 'success')
       //ovg.log(settings.list.blockUserList)
       HelperSettings.save([document.querySelector('.optionField')]);
     })
@@ -27,8 +26,7 @@ const HelperWASD = {
     item.classList.add(`table-menu__block`)
     item.style = 'justify-content: space-between;'
 
-    let usernameed = username
-    // let usernameed = settings.wasd.userNameEdited[username.trim().split('@').join('')];
+    let usernameed = settings.wasd.userNameEdited[username.trim().split('@').join('')];
     let setting = settings.obschat.list.highlightUserList[username]
 
     item.innerHTML = `<td><div><p title="${username}, ${setting.color}, ${setting.register}"> ${usernameed ? usernameed+' ('+username+')' : username} </p></div></td> <td><div><p> ${new Date(setting.date).toLocaleString()} </p></div></td> <td><div><p><div class="clr-field" style="color: ${setting.color};height: 24px;width: 34px;"><button aria-labelledby="clr-open-label"></button></div></p></div></td> <td class="td-btn-remove"><div> <ovg-button class="flat-btn ovg removeUser"> <button class="medium ovg remove warning" data="${username}"><i class="wasd-icons-delete" style="pointer-events: none;"></i></button> <ovg-tooltip><div class="tooltip tooltip_position-top tooltip_size-small" style="width: 260px;"><div class="tooltip-content tooltip-content_left"> Удалить </div></div></ovg-tooltip> </ovg-button> </div></td>`;
@@ -38,7 +36,7 @@ const HelperWASD = {
       let nickname = target.getAttribute('data')
       delete settings.obschat.list.highlightUserList[nickname];
       item.remove()
-      HelperSettings.showMessage(`Пользователь ${nickname} удален из выделения`, 'success')
+      HelperWASD.showChatMessage(`Пользователь ${nickname} удален из выделения`, 'success')
       //ovg.log(settings.list.highlightUserList)
       HelperSettings.save([document.querySelector('.optionField')]);
     })
@@ -56,7 +54,7 @@ const HelperWASD = {
       let termin = target.getAttribute('data')
       delete settings.obschat.list.blockTermList[termin];
       item.remove()
-      HelperSettings.showMessage(`Термин ${termin} удален из ЧС`, 'success')
+      HelperWASD.showChatMessage(`Термин ${termin} удален из ЧС`, 'success')
       //ovg.log(settings.list.blockTermList)
       HelperSettings.save([document.querySelector('.optionField')]);
     })
@@ -76,7 +74,7 @@ const HelperWASD = {
       let termin = target.getAttribute('data')
       delete settings.obschat.list.highlightTermList[termin];
       item.remove()
-      HelperSettings.showMessage(`Термин ${termin} удален из выделения`, 'success')
+      HelperWASD.showChatMessage(`Термин ${termin} удален из выделения`, 'success')
       //ovg.log(settings.list.highlightTermList)
       HelperSettings.save([document.querySelector('.optionField')]);
     })
@@ -84,19 +82,19 @@ const HelperWASD = {
   obs_addUserToBL(user) {
     let username = user.trim().split('@').join('')
     if (!settings.obschat.list.blockUserList[username]) {
-      HelperSettings.showMessage(`Пользователь ${username} добавлен в obs ЧС`, 'success')
+      HelperWASD.showChatMessage(`Пользователь ${username} добавлен в obs ЧС`, 'success')
       settings.obschat.list.blockUserList[username] = new Date();
       HelperWASD.obs_addUserToBlackList(username)
       HelperSettings.save([document.querySelector('.optionField')]);
     } else {
-      HelperSettings.showMessage('Пользователь уже в obs ЧС')
+      HelperWASD.showChatMessage('Пользователь уже в obs ЧС')
     }
-    obs_blacklistAddUser.value = ''
+    blacklistAddUser.value = ''
   },
   obs_addUserToHL(user, color = '', register = true) {
     let username = user.trim().split('@').join('')
     if (!settings.obschat.list.highlightUserList[username]) {
-      HelperSettings.showMessage(`Пользователь ${username} добавлен в выделение obs`, 'success')
+      HelperWASD.showChatMessage(`Пользователь ${username} добавлен в выделение obs`, 'success')
       settings.obschat.list.highlightUserList[username] = {}
       settings.obschat.list.highlightUserList[username]['username'] = username
       settings.obschat.list.highlightUserList[username]['date'] = new Date()
@@ -105,26 +103,26 @@ const HelperWASD = {
       HelperWASD.obs_addUserToHighLight(username)
       HelperSettings.save([document.querySelector('.optionField')]);
     } else {
-      HelperSettings.showMessage('Пользователь уже в obs ЧС')
+      HelperWASD.showChatMessage('Пользователь уже в obs ЧС')
     }
-    obs_highlightAddUser.value = ''
+    highlightAddUser.value = ''
   },
   obs_addTermToBL(t) {
     let term = t.trim()
     if (!settings.obschat.list.blockTermList[term]) {
-      HelperSettings.showMessage(`Термин ${term} добавлен в obs ЧС`, 'success')
+      HelperWASD.showChatMessage(`Термин ${term} добавлен в obs ЧС`, 'success')
       settings.obschat.list.blockTermList[term] = new Date();
       HelperWASD.obs_addTermToBlackList(term)
       HelperSettings.save([document.querySelector('.optionField')]);
     } else {
-      HelperSettings.showMessage('Пользователь уже в obs ЧС')
+      HelperWASD.showChatMessage('Пользователь уже в obs ЧС')
     }
-    obs_blacklistAddTerm.value = ''
+    blacklistAddTerm.value = ''
   },
   obs_addTermToHL(t, color = '', register = true, whole = true) {
     let term = t.trim()
     if (!settings.obschat.list.highlightTermList[term]) {
-      HelperSettings.showMessage(`Термин ${term} добавлен в выделение obs`, 'success')
+      HelperWASD.showChatMessage(`Термин ${term} добавлен в выделение obs`, 'success')
       settings.obschat.list.highlightTermList[term] = {}
       settings.obschat.list.highlightTermList[term]['term'] = term
       settings.obschat.list.highlightTermList[term]['date'] = new Date()
@@ -134,9 +132,9 @@ const HelperWASD = {
       HelperWASD.obs_addTermToHighLight(term)
       HelperSettings.save([document.querySelector('.optionField')]);
     } else {
-      HelperSettings.showMessage('Пользователь уже в obs ЧС')
+      HelperWASD.showChatMessage('Пользователь уже в obs ЧС')
     }
-    obs_highlightAddTermColor.value = ''
+    highlightAddTerm.value = ''
   },
   
 }

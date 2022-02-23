@@ -334,6 +334,10 @@ const HelperSettings = {
         title: `7TV эмоции ${Helper.tooltip('', `Перечисление twitch_username через \u0022;\u0022 Пример: twitch;username;`)}`,
         type: 'text'
       },
+      bwasd: {
+        title: `BWASD эмоции`,
+        type: 'boolean'
+      },
 
       obsfiltration: {
         title: 'Фильтрация',

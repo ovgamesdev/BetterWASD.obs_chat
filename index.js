@@ -66,6 +66,7 @@ var chat = {
     if (typeof settings.wasd.mtsc != 'string') settings.wasd.mtsc = '#000'
     if (settings.wasd.mts) {
       cssCode += `.message__info__text {text-shadow: 0 0 1px ${settings.wasd.mtsc}, 0 0 2px ${settings.wasd.mtsc};}`
+      cssCode += `.message__info__text [data-betterwasd-paint] {text-shadow: initial;}`
     }
 
     if (typeof settings.wasd.list == 'undefined') settings.wasd.list = {
@@ -155,13 +156,7 @@ const socket = {
         }, 30000)
       },
       error: function(err) {
-        try {
-          loader.updateStatus(err.responseJSON.error.details, `channel_name -> ${err.responseJSON.error.code}`) // log
-        } catch (err) {
-          loader.updateStatus('Неизвестная ошибка') // log
-          console.log(err)
-        }
-        
+        loader.updateStatus(err.responseJSON.error.details, `channel_name -> ${err.responseJSON.error.code}`) // log
         setTimeout(() => {
           socket.initChat()
         }, 30000)
@@ -221,6 +216,8 @@ const socket = {
           }).then((out) => {
             if (out) {
               // console.log(out)
+              loader.remove()
+
               if (typeof out.media_container == "undefined") {
                 socket.streamId = out.media_container_streams[0].stream_id
               } else {
@@ -447,7 +444,7 @@ const socket = {
       socket.socketd = null
       console.log(`[error]`, error);
       loader.updateStatus('Соединение прервано', 'error', true) // log
-      // socket.start()
+      //socket.start()
     };
   },
   stop(code, reason) {
@@ -470,18 +467,19 @@ const socket = {
 
     let message_text = JSData[1].message
 
-    if (true) { // settings.wasd.fl
-      message_text = HelperWASD.textToURL(message_text);
-    }
+    // if (true) { // settings.wasd.fl
+    //   message_text = HelperWASD.textToURL(message_text);
+    // }
 
-    if (settings.wasd.fcbc) {
-      message_text = stripCombiningMarks(message_text)
-    }
+    // if (settings.wasd.fcbc) {
+    //   message_text = stripCombiningMarks(message_text)
+    // }
 
 
-    message_text = HelperTV7.replaceText(message_text)
-    message_text = HelperBTTV.replaceText(message_text)
-    message_text = HelperFFZ.replaceText(message_text)
+    // message_text = HelperBWASD.replaceText(message_text)
+    // message_text = HelperTV7.replaceText(message_text)
+    // message_text = HelperBTTV.replaceText(message_text)
+    // message_text = HelperFFZ.replaceText(message_text)
 
 
     let div = document.createElement('div')
@@ -523,12 +521,13 @@ const socket = {
     if (!settings.wasd.sba) isAdmin = false
 
     div.classList.add('block__messages__item')
+    let paint = HelperWASD.paints[JSData[1].user_login]
 
     let _class = `class="message${settings.wasd.stime ? ` is-time` : ''}"`
     let time = `${settings.wasd.stime ? `<div class="message__time"> ${parser.time(JSData)} </div>` : ''}`
     let avatar = `${settings.wasd.simg ? `<div class="message__img"><img wasdlazyvisibleclass="visible" alt="" src="${parser.avatar(JSData)}" class="visible"></div>` : '' }`
     let sub = `${isSub ? `<div class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i class="icon wasd-icons-star"></i></div>` : ``}`
-    let username = `<div username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>`
+    let username = `<div username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''}<span ${paint ? 'data-betterwasd-paint="' + paint + '"' : ''}> ${JSData[1].user_login} </span></div>`
 
     div.innerHTML = `<wasd-chat-message>
       <div ${_class}>
@@ -556,6 +555,20 @@ const socket = {
     var messageText = div.querySelector('.message-text > span')
 
     div.setAttribute('mention', HelperWASD.get_user_color(messageText, div))
+
+    if (div.innerHTML != '') {
+      // Исправить символы ломающие чат 
+      if (settings.wasd.fcbc) div.innerHTML = stripCombiningMarks(div.innerHTML)
+
+      // fix link
+      if (true) HelperWASD.elementToURL(div)
+
+      // emotes
+      div.innerHTML = HelperTV7.replaceText(div.innerHTML);
+      div.innerHTML = HelperBTTV.replaceText(div.innerHTML);
+      div.innerHTML = HelperFFZ.replaceText(div.innerHTML);
+      div.innerHTML = HelperBWASD.replaceText(div.innerHTML);
+    }
 
     if (!settings.wasd.acd) settings.wasd.acd = 0
     if (isNew) {
@@ -621,12 +634,13 @@ const socket = {
     if (!settings.wasd.sba) isAdmin = false
 
     div.classList.add('block__messages__item')
+    let paint = HelperWASD.paints[JSData[1].user_login]
 
     let _class = `class="message ${settings.wasd.stime ? ` is-time` : ''}"`
     let time = `${settings.wasd.stime ? `<div class="message__time"> ${parser.time(JSData)} </div>` : ''}`
     let avatar = `${settings.wasd.simg ? `<div class="message__img"><img wasdlazyvisibleclass="visible" alt="" src="${parser.avatar(JSData)}" class="visible"></div>` : '' }`
     let sub = `${isSub ? `<div class="info__text__status-paid" style="background-color: ${parser.color(JSData)};"><i class="icon wasd-icons-star"></i></div>` : ``}`
-    let username = `<div username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''} ${JSData[1].user_login}</div>`
+    let username = `<div username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''}<span ${paint ? 'data-betterwasd-paint="' + paint + '"' : ''}> ${JSData[1].user_login} </span></div>`
     let sticker = `<img alt="sticker" class="sticker" src="${JSData[1].sticker.sticker_image[settings.wasd.ss]}"> <span class="chat-message-text stickertext sticker_text">Стикер</span>`
     div.innerHTML = `<wasd-chat-message>
       <div ${_class}>
@@ -745,14 +759,8 @@ const loader = {
   div: document.querySelector('#loader_div'),
   updateStatus(title='', description='', top=false) {
     console.log(title, description)
-    if (messages_div.lastElementChild.id == 'loader_div') {
-      loader.div.style['animation'] = ''
-      loader.div.style['-webkit-animation'] = ''
-
+    if (messages_div.lastElementChild && messages_div.lastElementChild.id == 'loader_div') {
       messages_div.lastElementChild.querySelector('.block__item__text').textContent = `${title} ${description ? `(${description})` : ''}`
-
-      loader.div.style['animation'] = 'fadeOut 0s ease 15000ms forwards'
-      loader.div.style['-webkit-animation'] = 'fadeOut 0s ease 15000ms forwards'
     } else if (top) {
       loader.div = document.createElement('div')
       loader.div.id = 'loader_div'
@@ -766,5 +774,8 @@ const loader = {
       messages_div.append(loader.div)
       document.querySelector('.block').scrollTop = document.querySelector('.block').scrollHeight
     }
+  },
+  remove() {
+    if (loader.div) loader.div.remove()
   }
 }

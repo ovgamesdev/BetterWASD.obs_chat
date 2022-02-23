@@ -61,8 +61,30 @@ const BetterStreamChat = {
         <p>
         </p>
       </div>
+      <header>
 
-      <main class="active" data-tab="obschat" style="width: 70%;">
+        <div class="header__left-side">
+          <a class="logo">
+            <img alt="BetterWASD.BOT" src="img/Wasd_Better_color_logo_dark.png">
+            <div class="logo__mob" tabindex="0"></div>
+          </a>
+
+          <wasd-input class="ng-valid ng-dirty ng-touched notfocused" id="settingsSearchDiv">
+            <div ovg="" class="wasd-input-wrapper">
+              <div ovg="" class="wasd-input">
+                <input ovg="" id="settingsSearch" class="has-button ng-pristine ng-untouched ng-valid ui-autocomplete-input" placeholder="Поиск настроек" type="text" autocomplete="off" style="margin: 0;">
+                <button ovg="" type="button" class="button-icon">
+                  <i ovg="" class="wasd-icons-search"></i>
+                </button>
+              </div>
+            </div>
+          </wasd-input>
+
+        </div>
+
+      </header>
+
+      <main class="active" data-tab="obschat" style="height: calc(100% - 48px);width: 70%;">
         <h1 style="padding: 10px 10px 5px 10px;"> Чат для OBS с эмоциями </h1>
         ${HelperSettings.build('obschat')}
 
@@ -204,7 +226,7 @@ const BetterStreamChat = {
 
         <p style="padding: 20px 10px 5px 10px;">Если вы обновите ссылку на закрытую трансляцию, то чат в доступе по ссылке перестанет работать! </p>
       </main>
-      <iframe src="" class="obschat" style="width: 30%;"></iframe>
+      <iframe src="" class="obschat" style="height: calc(100% - 48px);width: 30%;"></iframe>
 
       <main class="text" data-tab="changelog">
         <h1>Журнал изменений</h1>
@@ -438,7 +460,10 @@ const BetterStreamChat = {
 
 let initialize = async () => {
   try {
-    settings = await Helper.getSettings();
+    if (settings === null) {
+      settings = await Helper.getSettings();
+    }
+
     if (typeof settings === 'undefined') {
       settings = Helper.getDefaultSettings();
     }
@@ -457,3 +482,29 @@ let initialize = async () => {
 
 
 document.addEventListener("DOMContentLoaded", () => initialize());
+
+
+function handlerMessage(e){
+  var data = JSON.parse(e.data);
+  // var origin = e.origin;
+  // if(origin !== 'https://wasd.tv' ) {
+  //   return false;
+  // }
+
+  ownerWindow = e.source
+
+  if (data) {
+    settings.obschat = data
+
+
+    settings.obschat.channelname   = new URL(document.URL).searchParams.get('channel_name') || ''
+    settings.obschat.closedViewUrl = new URL(document.URL).searchParams.get('private_link') || ''
+
+    console.log('+settings =', settings)
+  }
+
+  document.querySelector('#bscSettingsPanel')?.remove()
+  BetterStreamChat.init()
+}
+
+window.addEventListener('message', handlerMessage);

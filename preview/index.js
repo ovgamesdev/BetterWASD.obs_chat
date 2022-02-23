@@ -80,8 +80,8 @@ var chat = {
       cssCode += '.sticker_text { display: inline!important; }';
     }
 
-    if (!settings.wasd.anim) settings.wasd.anim = '0'
-    if (!settings.wasd.nma) settings.wasd.nma = '15000'
+    if (typeof settings.wasd.anim == 'undefined') settings.wasd.anim = '0'
+    if (typeof settings.wasd.nma == 'undefined') settings.wasd.nma = '15000'
     if (settings.wasd.anim.toString() === '0') {
       let anim0 = `.block__messages__item {animation: fadeOut 0s ease ${settings.wasd.nma.toString()}ms forwards;-webkit-animation: fadeOut 0s ease ${settings.wasd.nma.toString()}ms forwards;}`
       cssCode += `${settings.wasd.nma.toString() == '0' ? '' : `${anim0}`}`
@@ -172,6 +172,7 @@ let spawner = {
     message = HelperTV7.replaceText(message)
     message = HelperBTTV.replaceText(message)
     message = HelperFFZ.replaceText(message)
+    message = HelperBWASD.replaceText(message)
 
     let isOwner  = data['role'].indexOf('owner')     != -1
     let isMod    = data['role'].indexOf('moderator') != -1

@@ -1,7 +1,7 @@
 const Helper = {
 	BETA: `<a style="position: relative;" class="tooltip-wrapper" title="Эта опция находится в стадии разработки и может работать некорректно."><i _ngcontent-boj-c248="" class="wasd-icons-beta" style="font-size: 14px;"></i></a>`,
   tooltip(text, data, url = '') {
-	  return `<a style="position: relative;" target="_blank" class="tooltip-wrapper" ${url == '' ? '' : `href="${url}"`} title='${data}'>${text == '' ? '<i _ngcontent-boj-c248="" class="wasd-icons-notice" style="font-size: 14px;"></i>' : text}</a>`
+	  return `<a style="position: relative;" class="tooltip-wrapper" ${url == '' ? '' : `href="${url}"`} title='${data}'>${text == '' ? '<i _ngcontent-boj-c248="" class="wasd-icons-notice" style="font-size: 14px;"></i>' : text}</a>`
 	},
   getDefaultSettings() {
     return {
@@ -44,6 +44,7 @@ const Helper = {
         bttv: '',
         ffz: '',
         tv7: '',
+        bwasd: true,
 
         list: {
           blockUserList: {},
@@ -60,18 +61,16 @@ const Helper = {
     return new Promise((resolve, reject) => {
       if (typeof chrome !== 'undefined') {
 
-      	// console.log(Cookies.get('settings'))
+      	Cookies.get('settings')
+
+      	console.log(Cookies.get('settings'))
 
         let defaultSettings = this.getDefaultSettings();
-        let items = {}
 
-        try {
-          items = JSON.parse( Cookies.get('settings') ) || {};
-        } catch (e) {
-          console.error(e)
-        }
+        let items = JSON.parse(Cookies.get('settings'))
 
         if (typeof items?.obschat !== 'undefined') {
+          items = items || {};
 
           for (let key in defaultSettings) {
             if (defaultSettings.hasOwnProperty(key)) {
