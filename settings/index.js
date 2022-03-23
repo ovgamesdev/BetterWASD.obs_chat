@@ -414,7 +414,7 @@ const BetterStreamChat = {
     }
 
     let obschat = settingsDiv.querySelector('iframe.obschat')
-    obschat.src = `${false ? 'http://localhost' : 'https://ovgamesdev.github.io/BetterWASD.obs_chat'}/preview/?settings=${encodeURI(JSON.stringify(settings.obschat)).replace(/#/ig, 'HASH')}&fade=false`
+    obschat.src = `${new URL(document.URL).origin == 'http://localhost' ? 'http://localhost' : 'https://ovgamesdev.github.io/BetterWASD.obs_chat'}/preview/?settings=${encodeURI(JSON.stringify(settings.obschat)).replace(/#/ig, 'HASH')}&fade=false`
 
     // navigation new
     for (let navItem of settingsDiv.querySelectorAll('#nav-sidebar .nav-sidebar__link')) {

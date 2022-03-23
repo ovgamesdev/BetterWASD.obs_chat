@@ -106,13 +106,19 @@ wasd-chat-message {
 
 .message__info__text .info__text__status {
     display: inline-flex;
-    flex-direction: row
+    flex-direction: row;
+
+    vertical-align: top
 }
 
 .message__info__text .info__text__status-paid {
+    background-repeat: no-repeat;
+    background-size: cover;
     border-radius: 2px;
+    height: 20px;
     margin-right: 4px;
-    padding: 0 4px
+    padding: 0;
+    width: 20px;
 }
 
 .message__info__text .info__text__status__name {
@@ -381,4 +387,30 @@ span.chat-message-text.stickertext {
   position: sticky;
   height: max-content;
   width: 100%;
+}
+
+
+.message__partner {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAaVBMVEUAAAAAj+wAj+wAj+oAj+wAj+wAj+sAj+sAj+8Aj+cAjusAj+wAjuoAj+wAj+wAjukAj+0Aj+z///+Ax/bf8f0gne7v+P4Qlu3P6vyg1fiQzvev3PlQsvJAq/EwpO9wwPRfufO/4/pwwPVKs/92AAAAEXRSTlMAv98QgO9AXyAgcLCgn1BQj6UrNIUAAAE9SURBVEjHnZVtb4MgFEYVpb5t7R5RbNXabv//R24zCGF45XbnU5Oek9xLDCQEWZa8QJYLQHyUXL+WWBEFSz+lsIhTVC9TeLyXkeEl/pIfrF8I7CCK2PBhUu5N8wYCt0o4PI3M/WkEIvhHfAGLsz17ARYyM0EBJrUJUjBpeIHSesRKygpu7Q+KH4ztL5odqJYRhH47EgHlX8ELnps/EMFdzYDjbvyuRxDYA5wG6y/a88Ng9v/uO+sTgdoEz9c9iMCOrGfjryxwhDsYHhg2/4mDAONWqKv58QU6cGs4FCIBHoRPBlg6wqcC9La4gQoaeIVZ+BNkUMNjmMwHF1CYIJPwUZ2ednxRJYYzWFz+cVU6opdx8K5Ux9e90f2EnCs9vfxk0Y9ifPjIKk0Vf9gFPXxkFVknTKpcAMIMz4WyvwH4HGJiifULPgAAAABJRU5ErkJggg==);
+  height: 16px;
+  margin: 2px 7px 2px 0;
+  min-width: 16px;
+  width: 16px;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+*, :after, :before {
+    box-sizing: border-box;
+}
+
+.info__text__status-ovg-badge {
+  background-size: cover;
+  height: 20px;
+  margin-right: 4px;
+  width: 20px;
+  background-repeat: no-repeat;
+  border-radius: 2px;
+  padding: 0px;
 }

@@ -309,6 +309,10 @@ const HelperSettings = {
         title: `Показать значки администратора`,
         type: 'boolean'
       },
+      swp: {
+        title: `Показать значки WASD партнера`,
+        type: 'boolean'
+      },
       mentionSelf: {
         title: `Выделять сообщения, упоминающие вас`,
         type: 'boolean'

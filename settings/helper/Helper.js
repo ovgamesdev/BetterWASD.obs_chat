@@ -38,6 +38,7 @@ const Helper = {
         sbm: true,
         sbs: true,
         sba: true,
+        swp: true,
         mentionSelf: true,
         cms: "rgba(var(--wasd-color-switch--rgb),.08)",
 
