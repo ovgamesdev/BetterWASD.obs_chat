@@ -36,7 +36,10 @@ const HelperTV7 = {
         }).then((data) => {
           tv7Emotes.global = {};
           for (let emote of data) {
-            tv7Emotes.global[emote.name] = emote.id;
+            tv7Emotes.global[emote.name] = {
+              id: emote.id,
+              zeroWidth: !!emote.visibility_simple.filter(t => t == "ZERO_WIDTH").length
+            };
           }
         }).finally(() => {
           tv7Users.global = {
@@ -92,7 +95,7 @@ const HelperTV7 = {
             break;
           }
         }
-        word = `<div class="bttv-emote tooltip-wrapper"> <img class="stickerovg tv7 small" style="vertical-align: middle; width: auto!important;" src="https://cdn.7tv.app/emote/${this.emotes[word]}/${size}x" alt="${word}" /> ${!settings.wasd.hoverTooltipEmote ? "" : `<ovg-tooltip><div class="tooltip tooltip_position-top tooltip_size-small" style="width: 260px;"><div class="tooltip-content tooltip-content_left"> Смайл:&nbsp;${word} <br> ${typeof tv7Users[user].username == 'string' ? `Канал: ${tv7Users[user].username} <br> Эмоции на канале 7TV` : 'Общедоступный 7TV'} </div></div></ovg-tooltip>`} <span class="chat-message-text stickertext stickerovg_text">Стикер</span> </div>`;
+        word = `<div data-code="${word}" class="bttv-emote tooltip-wrapper"> <img class="stickerovg tv7 small" style="vertical-align: middle; width: auto!important;" src="https://cdn.7tv.app/emote/${this.emotes[word]?.id}/${size}x" alt="${word}" /> ${!settings.wasd.hoverTooltipEmote ? "" : `<ovg-tooltip><div class="tooltip tooltip_position-top tooltip_size-small" style="width: 260px;"><div class="tooltip-content tooltip-content_left"> Смайл:&nbsp;${word} <br> ${typeof tv7Users[user].username == 'string' ? `Канал: ${tv7Users[user].username} <br> Эмоции на канале 7TV` : 'Общедоступный 7TV'} </div></div></ovg-tooltip>`} <span class="chat-message-text stickertext stickerovg_text">Стикер</span> </div>`;
       }
 
       newText.push(word);
@@ -131,7 +134,10 @@ const HelperTV7 = {
         emoteList = emoteList.concat(tv7Data.sharedEmotes);
     }*/
     for (let emote of emoteList) {
-      tv7Emotes[userID][emote.name] = emote.id;
+      tv7Emotes[userID][emote.name] = {
+        id: emote.id,
+        zeroWidth: !!emote.visibility_simple.filter(t => t == "ZERO_WIDTH").length
+      };
     }
   },
   addUser(userID, username) {

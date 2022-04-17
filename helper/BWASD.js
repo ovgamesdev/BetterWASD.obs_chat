@@ -57,7 +57,7 @@ const HelperBWASD = {
       size = Number(settings.wasd.bes) + 1;
 
 
-      let link = `${HelperBWASD.host}/cached/emote/${HelperBWASD.emotes[word]}/${size}x`
+      let link = `${HelperBWASD.host}/cached/emote/${HelperBWASD.emotes[word]?.id}/${size}x`
       // if (settings.wasd.staticGifEmotes.toString() === '0') link = `https://cache.ffzap.com/${link}`
 
       if (HelperBWASD.emotes[word]) {
@@ -68,8 +68,8 @@ const HelperBWASD = {
             break;
           }
         }
-        let title = ` Смайл:&nbsp;${word} <br> ${typeof HelperBWASD.items.bwasdUsers[user].username == 'string' ? `Канал: ${HelperBWASD.items.bwasdUsers[user].username} <br> Эмоции на канале BWASD` : 'Общедоступный BWASD'} `
-        word = `<div class="bttv-emote tooltip-wrapper" tooltip="${title}" title="${title}"> <img class="stickerovg bwasd small" style="vertical-align: middle; width: auto!important;" src="${link}" alt="${word}" /> <span class="chat-message-text stickertext stickerovg_text">Стикер</span> </div>`;
+        let title = ` Смайл:&nbsp;${word} <br> ${typeof HelperBWASD.items.bwasdUsers[user]?.username == 'string' ? `Канал: ${HelperBWASD.items.bwasdUsers[user]?.username} <br> Эмоции на канале BWASD` : 'Общедоступный BWASD'} `
+        word = `<div data-code="${word}" class="bttv-emote tooltip-wrapper" tooltip="${title}" title="${title}"> <img class="stickerovg bwasd small" style="vertical-align: middle; width: auto!important;" src="${link}" alt="${word}" /> <span class="chat-message-text stickertext stickerovg_text">Стикер</span> </div>`;
       }
 
       newText.push(word);
@@ -114,10 +114,16 @@ const HelperBWASD = {
       globalList = globalList.concat(bwasdData.global);
     }
     for (let emote of emoteList) {
-      HelperBWASD.items.bwasdEmotes[userID][emote.code] = emote._id;
+      HelperBWASD.items.bwasdEmotes[userID][emote.code] = {
+        id: emote._id,
+        zeroWidth: false
+      };
     }
     for (let emote of globalList) {
-      HelperBWASD.items.bwasdEmotes.global[emote.code] = emote._id;
+      HelperBWASD.items.bwasdEmotes.global[emote.code] = {
+        id: emote._id,
+        zeroWidth: false
+      };
     }
   },
   addUser(userID, username) {

@@ -603,6 +603,7 @@ const socket = {
       div.innerHTML = HelperBTTV.replaceText(div.innerHTML);
       div.innerHTML = HelperFFZ.replaceText(div.innerHTML);
       div.innerHTML = HelperBWASD.replaceText(div.innerHTML);
+      HelperWASD.setZeroSizeEmotes(div)
     }
 
     if (!settings.wasd.acd) settings.wasd.acd = 0

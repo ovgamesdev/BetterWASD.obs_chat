@@ -414,3 +414,30 @@ span.chat-message-text.stickertext {
   border-radius: 2px;
   padding: 0px;
 }
+
+/* modified emote */
+
+.modified-emote > span > div > .chat-message-text {
+  display: none!important;
+}
+
+.modified-emote span:not(.chat-message-text) {
+  position: absolute;
+  top: -20px;
+  bottom: -20px;
+  left: -20px;
+  right: -20px;
+  margin: auto;
+  pointer-events: none;
+}
+
+.modified-emote span .bttv-emote {
+  padding: 0px 0px 0px 0px;
+  margin: 0 !important;
+
+  position: absolute;
+  pointer-events: none!important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}

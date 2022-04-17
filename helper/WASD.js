@@ -159,5 +159,28 @@ const HelperWASD = {
       }
     })
 
+  },
+  setZeroSizeEmotes(html) {
+    let allEmotes = {}
+    for (let emote in HelperBTTV.emotes) allEmotes[emote] = HelperBTTV.emotes[emote]
+    for (let emote in HelperBWASD.emotes) allEmotes[emote] = HelperBWASD.emotes[emote]
+    for (let emote in HelperFFZ.emotes) allEmotes[emote] = HelperFFZ.emotes[emote]
+    for (let emote in HelperTV7.emotes) allEmotes[emote] = HelperTV7.emotes[emote]
+
+    let emotes = html.querySelectorAll('span > .bttv-emote')
+    emotes.forEach((value, index) => {
+      if ((allEmotes[value.dataset.code]?.zeroWidth || value.dataset.code == 'cvHazmat' || value.dataset.code == 'cvMask') && emotes[index-1]) {
+        let emots = html.querySelectorAll('span > .bttv-emote:not(.modified-emote)')
+
+        let modified = emotes[index-1]?.closest('.modified-emote') || emotes[index-1]
+        if (!modified.classList.contains('modified-emote')) modified.dataset.title += '</br>'
+        modified.classList.add('modified-emote')
+        modified.dataset.title += '</br>&nbsp;'+value.dataset.code+'&nbsp; - модификация'
+
+        let span = document.createElement('span')
+        span.append(value)
+        modified.append(span)
+      }
+    })
   }
 }

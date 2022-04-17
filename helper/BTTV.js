@@ -36,7 +36,10 @@ const HelperBTTV = {
         }).then((data) => {
           bttvEmotes.global = {};
           for (let emote of data) {
-            bttvEmotes.global[emote.code] = emote.id;
+            bttvEmotes.global[emote.code] = {
+              id: emote.id,
+              zeroWidth: false
+            };
           }
         }).finally(() => {
           bttvUsers.global = {
@@ -79,7 +82,7 @@ const HelperBTTV = {
     let newText = [];
     for (let word of split) {
       size = Number(settings.wasd.bes) + 1;
-      let link = `https://cdn.betterttv.net/emote/${HelperBTTV.emotes[word]}/${size}x`
+      let link = `https://cdn.betterttv.net/emote/${HelperBTTV.emotes[word]?.id}/${size}x`
       // if (settings.wasd.staticGifEmotes.toString() === '0') link = `https://cache.ffzap.com/${link}`
 
 
@@ -92,7 +95,7 @@ const HelperBTTV = {
             break;
           }
         }
-        word = `<div class="bttv-emote tooltip-wrapper"> <img class="stickerovg bttv small" style="vertical-align: middle; width: auto!important;" src="${link}" alt="${word}" /> ${!settings.wasd.hoverTooltipEmote ? "" : `<ovg-tooltip><div class="tooltip tooltip_position-top tooltip_size-small" style="width: 260px;"><div class="tooltip-content tooltip-content_left"> Смайл:&nbsp;${word} <br> ${typeof bttvUsers[user].username == 'string' ? `Канал: ${bttvUsers[user].username} <br> Эмоции на канале BTTV` : 'Общедоступный BTTV'} </div></div></ovg-tooltip>`} <span class="chat-message-text stickertext stickerovg_text">Стикер</span> </div>`;
+        word = `<div data-code="${word}" class="bttv-emote tooltip-wrapper"> <img class="stickerovg bttv small" style="vertical-align: middle; width: auto!important;" src="${link}" alt="${word}" /> ${!settings.wasd.hoverTooltipEmote ? "" : `<ovg-tooltip><div class="tooltip tooltip_position-top tooltip_size-small" style="width: 260px;"><div class="tooltip-content tooltip-content_left"> Смайл:&nbsp;${word} <br> ${typeof bttvUsers[user].username == 'string' ? `Канал: ${bttvUsers[user].username} <br> Эмоции на канале BTTV` : 'Общедоступный BTTV'} </div></div></ovg-tooltip>`} <span class="chat-message-text stickertext stickerovg_text">Стикер</span> </div>`;
       }
 
       newText.push(word);
@@ -131,7 +134,10 @@ const HelperBTTV = {
       emoteList = emoteList.concat(bttvData.sharedEmotes);
     }
     for (let emote of emoteList) {
-      bttvEmotes[userID][emote.code] = emote.id;
+      bttvEmotes[userID][emote.code] = {
+        id: emote.id,
+        zeroWidth: false
+      };
     }
   },
   addUser(userID, username) {
