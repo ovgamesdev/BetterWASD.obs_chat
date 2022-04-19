@@ -42,8 +42,8 @@ const HelperWASD = {
     let bl = ''
     if (messageText) {
       messageText.innerHTML = messageText.innerHTML.replace(/@[a-zA-Z0-9_-]+/ig, function($1) {
-        let paint = HelperWASD.paints[$1.trim().split('@').join('')]
-        return `<span ${paint ? 'data-betterwasd-paint="' + paint + '"' : ''} style='color: ${HelperWASD.usercolor($1.trim())};' class='chat-message-mention' username="${$1.toLowerCase()}">@${$1.trim().split('@').join('').trim()}</span>`;
+        let userPaint = HelperWASD.paints[$1.trim().split('@').join('')]
+        return `<span ${!userPaint?HelperWASD.usercolor($1.trim()):userPaint.length<7?'data-betterwasd-paint="'+userPaint+'"':'data-betterwasd-paint-color="'+userPaint+'" style="color:'+userPaint+'"'} class='chat-message-mention' username="${$1.toLowerCase()}">@${$1.trim().split('@').join('').trim()}</span>`;
       });
 
       div.querySelectorAll('.chat-message-mention').forEach(element => {
@@ -122,11 +122,13 @@ const HelperWASD = {
           HelperWASD.paints = out.paints
 
           for (let paint in HelperWASD.paints) {
-            for (let user of document.querySelectorAll(`.info__text__status__name[username="${paint}"] > span`)) {
-              user.dataset.betterwasdPaint = HelperWASD.paints[paint]
-            }
-            for (let user of document.querySelectorAll(`.chat-message-mention[username="@${paint}"]`)) {
-              user.dataset.betterwasdPaint = HelperWASD.paints[paint]
+            for (let user of [...document.querySelectorAll(`.info__text__status__name[username="${paint}"] > span`), ...document.querySelectorAll(`.chat-message-mention[username="@${paint}"]`)]) {
+              if (userPaint.length < 7) {
+                user.dataset.betterwasdPaint = HelperWASD.paints[paint]
+              } else {
+                user.style.color = userPaint
+                user.dataset.betterwasdPaintColor = HelperWASD.paints[paint]
+              }
             }
           }
 

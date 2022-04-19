@@ -555,13 +555,13 @@ const socket = {
     if (days_as_sub) subscriptionPeriods.every(t => !(t.startDays > days_as_sub || (_currentPeriod = t, 0)))
 
     div.classList.add('block__messages__item')
-    let paint = HelperWASD.paints[JSData[1].user_login]
+    let userPaint = HelperWASD.paints[JSData[1].user_login]
 
     let _class = `class="message${settings.wasd.stime ? ` is-time` : ''}"`
     let time = `${settings.wasd.stime ? `<div class="message__time"> ${parser.time(JSData)} </div>` : ''}`
     let avatar = `${settings.wasd.simg ? `<div class="message__img"><img wasdlazyvisibleclass="visible" alt="" src="${parser.avatar(JSData)}" class="visible"></div>` : '' }`
     let sub = `${isSub ? `<div days_as_sub="${days_as_sub}" class="info__text__status-paid" style="background-image: url(${_currentPeriod.iconUrl});"><!--i class="icon wasd-icons-star"></i--></div>` : ``}`
-    let username = `<div username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''}<span ${paint ? 'data-betterwasd-paint="' + paint + '"' : ''}> ${JSData[1].user_login} </span></div>`
+    let username = `<div username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''}<span ${userPaint.length<7?'data-betterwasd-paint="'+userPaint+'"':'data-betterwasd-paint-color="'+userPaint+'" style="color:'+userPaint+'"'}> ${JSData[1].user_login} </span></div>`
 
     div.innerHTML = `<wasd-chat-message>
       <div ${_class}>
@@ -705,13 +705,13 @@ const socket = {
     if (days_as_sub) subscriptionPeriods.every(t => !(t.startDays > days_as_sub || (_currentPeriod = t, 0)))
 
     div.classList.add('block__messages__item')
-    let paint = HelperWASD.paints[JSData[1].user_login]
+    let userPaint = HelperWASD.paints[JSData[1].user_login]
 
     let _class = `class="message ${settings.wasd.stime ? ` is-time` : ''}"`
     let time = `${settings.wasd.stime ? `<div class="message__time"> ${parser.time(JSData)} </div>` : ''}`
     let avatar = `${settings.wasd.simg ? `<div class="message__img"><img wasdlazyvisibleclass="visible" alt="" src="${parser.avatar(JSData)}" class="visible"></div>` : '' }`
     let sub = `${isSub ? `<div days_as_sub="${days_as_sub}" class="info__text__status-paid" style="background-image: url(${_currentPeriod.iconUrl});"><!--i class="icon wasd-icons-star"></i--></div>` : ``}`
-    let username = `<div username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''}<span ${paint ? 'data-betterwasd-paint="' + paint + '"' : ''}> ${JSData[1].user_login} </span></div>`
+    let username = `<div username="${JSData[1].user_login.toLowerCase()}" u_color="${parser.color(JSData)}" class="info__text__status__name ${isMod ? 'is-moderator' : ''}${isOwner ? 'is-owner' : ''}${isAdmin ? 'is-admin' : ''}" style="${isMod || isOwner || isAdmin ? '' : `color: ${parser.color(JSData)}`}">${isMod ? '<i _ngcontent-eti-c54="" class="icon wasd-icons-moderator"></i>' : ''}${isOwner ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-owner"></i>' : ''}${isAdmin ? '<i _ngcontent-lef-c54="" class="icon wasd-icons-dev"></i>' : ''}<span ${userPaint.length<7?'data-betterwasd-paint="'+userPaint+'"':'data-betterwasd-paint-color="'+userPaint+'" style="color:'+userPaint+'"'}> ${JSData[1].user_login} </span></div>`
     let sticker = `<img alt="sticker" class="sticker" src="${JSData[1].sticker.sticker_image[settings.wasd.ss]}"> <span class="chat-message-text stickertext sticker_text">Стикер</span>`
     div.innerHTML = `<wasd-chat-message>
       <div ${_class}>
